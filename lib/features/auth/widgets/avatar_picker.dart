@@ -10,6 +10,10 @@ class AvatarPicker extends StatefulWidget {
 
   final ValueChanged<int>? onChanged;
 
+  /// The avatar shown centred before the user swipes. Callers seed their own
+  /// state with this, since [onChanged] only fires once the page changes.
+  static int get defaultIndex => AppAssets.avatars.length ~/ 2;
+
   @override
   State<AvatarPicker> createState() => _AvatarPickerState();
 }
@@ -29,7 +33,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     initialPage: _selected,
   );
 
-  int _selected = _avatars.length ~/ 2;
+  int _selected = AvatarPicker.defaultIndex;
 
   @override
   void dispose() {
