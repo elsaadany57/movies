@@ -4,12 +4,12 @@ import 'package:movies_app/app.dart';
 import 'package:movies_app/data/repositories/movie_repository.dart';
 import 'package:movies_app/data/services/movie_service.dart';
 import 'package:movies_app/features/movies/view_models/movies_view_model.dart';
-import 'package:movies_app/features/movies/views/movies_screen.dart';
+import 'package:movies_app/features/auth/views/login_screen.dart';
 import 'package:movies_app/features/onboarding/views/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  testWidgets('splash -> onboarding -> movies', (tester) async {
+  testWidgets('splash -> onboarding -> login', (tester) async {
     tester.view.physicalSize = const Size(430, 932);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -50,6 +50,6 @@ void main() {
     expect(find.text('Start Watching Now'), findsOneWidget);
     await tester.tap(find.text('Finish'));
     await tester.pumpAndSettle();
-    expect(find.byType(MoviesScreen), findsOneWidget);
+    expect(find.byType(LoginScreen), findsOneWidget);
   });
 }

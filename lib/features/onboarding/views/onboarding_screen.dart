@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/constants/app_assets.dart';
-import '../../movies/views/movies_screen.dart';
+import '../../auth/views/login_screen.dart';
 import '../models/onboarding_item.dart';
 import '../widgets/onboarding_intro_page.dart';
 import '../widgets/onboarding_sheet_page.dart';
@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _finish() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: (_) => const MoviesScreen()),
+      MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
     );
   }
 
