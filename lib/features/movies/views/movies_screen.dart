@@ -16,7 +16,11 @@ class _MoviesScreenState extends State<MoviesScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<MoviesViewModel>().loadMovies();
+    // Deferred: loadMovies() notifies listeners, which cannot happen
+    // while this widget's own build is still in flight.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<MoviesViewModel>().loadMovies();
+    });
   }
 
   @override
