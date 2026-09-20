@@ -40,6 +40,15 @@ class _FakeAuthRepository implements AuthRepository {
   Future<void> sendPasswordReset(String email) async {}
 
   @override
+  Future<AppUser?> currentProfile() async => null;
+
+  @override
+  Future<void> updateProfile(AppUser user) async {}
+
+  @override
+  Future<void> deleteAccount() async {}
+
+  @override
   Future<void> signOut() async {}
 }
 

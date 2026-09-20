@@ -41,4 +41,17 @@ class AuthRepository {
   }
 
   Future<void> signOut() => _service.signOut();
+
+  /// The profile of whoever is signed in, or null when nobody is.
+  Future<AppUser?> currentProfile() async {
+    final uid = _service.currentUser?.uid;
+    return uid == null ? null : _service.fetchProfile(uid);
+  }
+
+  Future<void> updateProfile(AppUser user) => _service.saveProfile(user);
+
+  Future<void> deleteAccount() async {
+    final uid = _service.currentUser?.uid;
+    if (uid != null) await _service.deleteAccount(uid);
+  }
 }

@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/widgets/network_poster.dart';
+import '../../../core/utils/responsive.dart';
 import '../../../data/models/movie.dart';
 import 'movie_poster_card.dart';
 
@@ -36,7 +39,8 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
     if (movies.isEmpty) return const SizedBox.shrink();
 
     final backdrop = movies[_selected.clamp(0, movies.length - 1)];
-    const cardHeight = _cardWidth / MoviePosterCard.aspectRatio;
+    final cardWidth = context.w(_cardWidth);
+    final cardHeight = cardWidth / MoviePosterCard.aspectRatio;
 
     return Stack(
       alignment: Alignment.topCenter,
@@ -50,17 +54,20 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
               colors: [Colors.white, Colors.transparent],
             ).createShader(rect),
             blendMode: BlendMode.dstIn,
-            child: Opacity(
-              opacity: 0.5,
-              child: NetworkPoster(url: backdrop.backgroundUrl),
+            child: ImageFiltered(
+              imageFilter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: Opacity(
+                opacity: 0.5,
+                child: NetworkPoster(url: backdrop.backgroundUrl),
+              ),
             ),
           ),
         ),
         Column(
           children: [
-            const SizedBox(height: 16),
-            Image.asset(AppAssets.availableNow, width: 265),
-            const SizedBox(height: 16),
+            SizedBox(height: MediaQuery.paddingOf(context).top + context.h(8)),
+            Image.asset(AppAssets.availableNow, width: context.w(265)),
+            SizedBox(height: context.h(16)),
             SizedBox(
               height: cardHeight,
               child: PageView.builder(
@@ -68,13 +75,13 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
                 itemCount: movies.length,
                 onPageChanged: (i) => setState(() => _selected = i),
                 itemBuilder: (_, i) => Center(
-                  child: MoviePosterCard(movie: movies[i], width: _cardWidth),
+                  child: MoviePosterCard(movie: movies[i], width: cardWidth),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            Image.asset(AppAssets.watchNow, width: 351),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
+            Image.asset(AppAssets.watchNow, width: context.w(351)),
+            SizedBox(height: context.h(24)),
           ],
         ),
       ],

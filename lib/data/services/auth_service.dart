@@ -34,6 +34,11 @@ class AuthService {
 
   Future<void> signOut() => _auth.signOut();
 
+  Future<void> deleteAccount(String uid) async {
+    await _firestore.collection(_usersCollection).doc(uid).delete();
+    await _auth.currentUser?.delete();
+  }
+
   Future<void> saveProfile(AppUser user) {
     return _firestore
         .collection(_usersCollection)

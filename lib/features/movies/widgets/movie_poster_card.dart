@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/network_poster.dart';
+import '../../../core/utils/responsive.dart';
 import '../../../data/models/movie.dart';
 import '../views/movie_details_screen.dart';
 import 'rating_badge.dart';
@@ -12,12 +13,12 @@ class MoviePosterCard extends StatelessWidget {
     super.key,
     required this.movie,
     required this.width,
-    this.radius = 12,
+    this.radius,
   });
 
   final Movie movie;
   final double width;
-  final double radius;
+  final double? radius;
 
   /// Posters are 2:3, which is what the API's cover images use.
   static const aspectRatio = 2 / 3;
@@ -36,11 +37,14 @@ class MoviePosterCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: NetworkPoster(url: movie.coverUrl, radius: radius),
+              child: NetworkPoster(
+                url: movie.coverUrl,
+                radius: radius ?? context.w(12),
+              ),
             ),
             Positioned(
-              top: 8,
-              left: 8,
+              top: context.h(8),
+              left: context.w(8),
               child: RatingBadge(rating: movie.rating),
             ),
           ],

@@ -1,3 +1,5 @@
+import 'cast_member.dart';
+
 /// A movie as the YTS API returns it. The list and details endpoints share
 /// most fields, so one model covers both; the details-only ones stay null
 /// until [MovieService.movieDetails] fills them.
@@ -15,6 +17,7 @@ class Movie {
     this.likeCount,
     this.trailerCode,
     this.screenshots = const [],
+    this.cast = const [],
   });
 
   final int id;
@@ -33,6 +36,7 @@ class Movie {
   final int? likeCount;
   final String? trailerCode;
   final List<String> screenshots;
+  final List<CastMember> cast;
 
   bool get hasTrailer => (trailerCode ?? '').isNotEmpty;
 
@@ -68,6 +72,10 @@ class Movie {
         ])
           if (json[key] is String && (json[key] as String).isNotEmpty)
             json[key] as String,
+      ],
+      cast: [
+        for (final member in (json['cast'] as List?) ?? const [])
+          CastMember.fromJson((member as Map).cast<String, dynamic>()),
       ],
     );
   }

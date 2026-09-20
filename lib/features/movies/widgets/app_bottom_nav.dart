@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// The floating rounded tab bar. The selected tab turns yellow; the rest
 /// stay white.
@@ -25,11 +26,11 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 61,
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      height: context.h(61),
+      margin: EdgeInsets.fromLTRB(context.w(16), 0, context.w(16), context.h(16)),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(context.w(20)),
       ),
       child: Row(
         children: [
@@ -41,8 +42,8 @@ class AppBottomNav extends StatelessWidget {
                 child: Center(
                   child: Image.asset(
                     items[i],
-                    width: 26,
-                    height: 26,
+                    width: context.w(26),
+                    height: context.w(26),
                     fit: BoxFit.contain,
                     color: i == currentIndex
                         ? AppColors.primary

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/widgets/app_state_view.dart';
+import '../../profile/views/profile_screen.dart';
 import '../widgets/app_bottom_nav.dart';
+import 'browse_screen.dart';
 import 'home_screen.dart';
+import 'search_screen.dart';
 
-/// Holds the four tabs and the floating nav bar. Only Home is built so far;
-/// the rest show the shared empty state.
+/// Holds the four tabs and the floating nav bar.
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -16,22 +17,18 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _index = 0;
 
-  static const _placeholders = {
-    1: 'Search is coming soon',
-    2: 'Browse is coming soon',
-    3: 'Your profile is coming soon',
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      // IndexedStack so each tab keeps its scroll position and results.
       body: IndexedStack(
         index: _index,
-        children: [
-          const HomeScreen(),
-          for (final message in _placeholders.values)
-            AppStateView(emptyMessage: message),
+        children: const [
+          HomeScreen(),
+          SearchScreen(),
+          BrowseScreen(),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: AppBottomNav(
