@@ -27,6 +27,15 @@ class AppAssets {
   static const icName = '$_icons/ic_name.png';
   static const icEyeOff = '$_icons/ic_eye_off.png';
 
+  static const navHome = '$_icons/nav_home.png';
+  static const navSearch = '$_icons/nav_search.png';
+  static const navBrowse = '$_icons/nav_browse.png';
+  static const navProfile = '$_icons/nav_profile.png';
+
+  static const availableNow = '$_images/home/available_now.png';
+  static const watchNow = '$_images/home/watch_now.png';
+  static const emptyPopcorn = '$_images/common/empty_popcorn.png';
+
   static const flagUs = '$_icons/flag_us.png';
   static const flagEg = '$_icons/flag_eg.png';
 }
