@@ -1,8 +1,19 @@
+/// The YTS API (https://yts.gg/api). No key is required; the docs ask that
+/// callers cache responses and keep request rates reasonable.
 class ApiConstants {
-  static const baseUrl = 'https://api.themoviedb.org/3';
-  static const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+  static const baseUrl = 'https://movies-api.accel.li/api/v2';
 
-  /// Passed at build time so the key never lands in git:
-  /// flutter run --dart-define=TMDB_API_KEY=your_key
-  static const apiKey = String.fromEnvironment('TMDB_API_KEY');
+  static const listMovies = '/list_movies.json';
+  static const movieDetails = '/movie_details.json';
+  static const movieSuggestions = '/movie_suggestions.json';
+
+  /// Genres the home screen shows a row for, in order.
+  static const homeGenres = [
+    'Action',
+    'Adventure',
+    'Animation',
+    'Comedy',
+    'Drama',
+    'Horror',
+  ];
 }
