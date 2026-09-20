@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +55,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '894091766054',
     projectId: 'movies-bd6ed',
     storageBucket: 'movies-bd6ed.firebasestorage.app',
+  );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBk6ZsHMMpisO9qFZfLCawsOot8sYsfhps',
+    appId: '1:894091766054:ios:b877ded9953b31c73bf9e7',
+    messagingSenderId: '894091766054',
+    projectId: 'movies-bd6ed',
+    storageBucket: 'movies-bd6ed.firebasestorage.app',
+    androidClientId: '894091766054-3etgd13go47hkdtuh0lvpc03tgtpuhrl.apps.googleusercontent.com',
+    iosClientId: '894091766054-rmrfg4vo4jm2kqm23ddso90f7uh8t43a.apps.googleusercontent.com',
+    iosBundleId: 'com.dragon.moviesApp',
   );
 }
