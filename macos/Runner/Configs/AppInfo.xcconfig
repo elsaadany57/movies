@@ -8,7 +8,7 @@
 PRODUCT_NAME = movies_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.saadany.moviesApp
+PRODUCT_BUNDLE_IDENTIFIER = com.dragon.moviesApp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.saadany. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.dragon. All rights reserved.

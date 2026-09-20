@@ -1,4 +1,4 @@
-package com.saadany.movies_app
+package com.dragon.movies_app
 
 import io.flutter.embedding.android.FlutterActivity
 
