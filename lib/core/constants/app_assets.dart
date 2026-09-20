@@ -14,18 +14,34 @@ class AppAssets {
 
   static const forgetPassword = '$_images/auth/forget_password.png';
 
-  /// The avatars offered on the register screen, in carousel order.
+  /// Every selectable avatar, in the order the pickers show them.
   static const avatars = [
     '$_images/avatars/avatar_1.png',
     '$_images/avatars/avatar_2.png',
     '$_images/avatars/avatar_3.png',
+    '$_images/avatars/avatar_4.png',
+    '$_images/avatars/avatar_5.png',
+    '$_images/avatars/avatar_6.png',
+    '$_images/avatars/avatar_7.png',
+    '$_images/avatars/avatar_8.png',
+    '$_images/avatars/avatar_9.png',
+    '$_images/avatars/avatar_10.png',
+    '$_images/avatars/avatar_11.png',
+    '$_images/avatars/avatar_12.png',
   ];
+
+  /// Falls back to the first avatar when a stored index is out of range.
+  static String avatarAt(int index) =>
+      avatars[index.clamp(0, avatars.length - 1)];
 
   static const icEmail = '$_icons/ic_email.png';
   static const icPassword = '$_icons/ic_password.png';
   static const icPhone = '$_icons/ic_phone.png';
   static const icName = '$_icons/ic_name.png';
   static const icEyeOff = '$_icons/ic_eye_off.png';
+
+  static const icWatchlist = '$_icons/ic_watchlist.png';
+  static const icHistory = '$_icons/ic_history.png';
 
   static const navHome = '$_icons/nav_home.png';
   static const navSearch = '$_icons/nav_search.png';

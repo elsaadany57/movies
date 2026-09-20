@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../utils/responsive.dart';
 
 /// Full-width pill button from the design. [AppButton.filled] is the yellow
 /// primary action, [AppButton.outlined] the yellow-bordered secondary one.
@@ -12,6 +13,7 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.loading = false,
+    this.color,
   }) : _outlined = false;
 
   const AppButton.outlined({
@@ -20,6 +22,7 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.loading = false,
+    this.color,
   }) : _outlined = true;
 
   final String label;
@@ -30,65 +33,70 @@ class AppButton extends StatelessWidget {
 
   /// Swaps the label for a spinner and refuses taps while an action runs.
   final bool loading;
-  final bool _outlined;
 
-  static const _height = 55.0;
-  static const _padding = EdgeInsets.symmetric(horizontal: 12);
-  static final _shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(16));
-  // A ButtonStyle textStyle replaces the theme's outright instead of merging
-  // with it, so the family has to be named here too.
-  static const _textStyle = TextStyle(
-    fontFamily: AppTheme.fontFamily,
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-  );
+  /// Overrides the yellow, for the red destructive buttons.
+  final Color? color;
+  final bool _outlined;
 
   @override
   Widget build(BuildContext context) {
+    final accent = color ?? AppColors.primary;
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(context.w(16)),
+    );
+    // A ButtonStyle textStyle replaces the theme's outright instead of merging
+    // with it, so the family has to be named here too.
+    final textStyle = TextStyle(
+      fontFamily: AppTheme.fontFamily,
+      fontSize: context.sp(20),
+      fontWeight: FontWeight.w600,
+    );
+    final padding = EdgeInsets.symmetric(horizontal: context.w(12));
+
     final icon = this.icon;
-    final label = loading
-        ? const SizedBox.square(
-            dimension: 24,
-            child: CircularProgressIndicator(strokeWidth: 2.5),
+    final child = loading
+        ? SizedBox.square(
+            dimension: context.w(24),
+            child: const CircularProgressIndicator(strokeWidth: 2.5),
           )
-        : null;
-    final child = label ??
-        (icon == null
-            ? Text(this.label)
+        : (icon == null
+            ? Text(label)
             : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              icon,
-              const SizedBox(width: 12),
-              // Flexible so a long label ellipsises instead of overflowing
-              // the row on a narrow screen.
-              Flexible(child: Text(this.label, overflow: TextOverflow.ellipsis)),
-            ],
-          ));
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  icon,
+                  SizedBox(width: context.w(12)),
+                  // Flexible so a long label ellipsises instead of overflowing
+                  // the row on a narrow screen.
+                  Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+                ],
+              ));
 
     return SizedBox(
       width: double.infinity,
-      height: _height,
+      height: context.h(55),
       child: _outlined
           ? OutlinedButton(
               onPressed: loading ? null : onPressed,
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary, width: 1.5),
-                shape: _shape,
-                textStyle: _textStyle,
-                padding: _padding,
+                foregroundColor: accent,
+                side: BorderSide(color: accent, width: context.w(1.5)),
+                shape: shape,
+                textStyle: textStyle,
+                padding: padding,
               ),
               child: child,
             )
           : FilledButton(
               onPressed: loading ? null : onPressed,
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.background,
-                shape: _shape,
-                textStyle: _textStyle,
-                padding: _padding,
+                backgroundColor: accent,
+                foregroundColor: accent == AppColors.primary
+                    ? AppColors.background
+                    : AppColors.white,
+                shape: shape,
+                textStyle: textStyle,
+                padding: padding,
               ),
               child: child,
             ),

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// The Google mark as the design draws it: one solid colour, not the
 /// four-colour logo, so it reads against the yellow button.
 class GoogleLogo extends StatelessWidget {
-  const GoogleLogo({super.key, this.size = 26, this.color = AppColors.background});
+  const GoogleLogo({super.key, this.size, this.color = AppColors.background});
 
-  final double size;
+  final double? size;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(
-      dimension: size,
+      dimension: size ?? context.w(26),
       child: CustomPaint(painter: _GooglePainter(color)),
     );
   }

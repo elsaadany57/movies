@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 import '../../onboarding/views/onboarding_screen.dart';
 
 /// Shows the logo briefly, then moves on to onboarding.
@@ -52,18 +53,18 @@ class _SplashScreenState extends State<SplashScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              Expanded(child: Center(child: Image.asset(AppAssets.appIcon))),
-              Image.asset(AppAssets.routeLogo),
-              const SizedBox(height: 4),
-              const Text(
+              Expanded(child: Center(child: Image.asset(AppAssets.appIcon, width: context.w(253)))),
+              Image.asset(AppAssets.routeLogo, width: context.w(180)),
+              SizedBox(height: context.h(4)),
+              Text(
                 'Supervised by Mohamed Nabil',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 16,
+                  fontSize: context.sp(16),
                   color: AppColors.white,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: context.h(24)),
             ],
           ),
         ),

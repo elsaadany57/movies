@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// "Don't Have Account ? Create One" — plain question, yellow tappable answer.
 class AuthPrompt extends StatelessWidget {
@@ -20,7 +21,7 @@ class AuthPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        style: const TextStyle(fontSize: 14, color: AppColors.white),
+        style: TextStyle(fontSize: context.sp(14), color: AppColors.white),
         children: [
           TextSpan(text: '$question '),
           TextSpan(

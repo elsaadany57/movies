@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_button.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_text_field.dart';
@@ -44,9 +45,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         key: _formKey,
         child: Column(
           children: [
-            const SizedBox(height: 24),
-            Image.asset(AppAssets.forgetPassword),
-            const SizedBox(height: 48),
+            SizedBox(height: context.h(24)),
+            Image.asset(AppAssets.forgetPassword, width: context.w(430)),
+            SizedBox(height: context.h(48)),
             AuthTextField(
               controller: _email,
               hint: 'Email',
@@ -55,7 +56,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               textInputAction: TextInputAction.done,
               validator: Validators.email,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AppButton.filled(
               label: 'Verify Email',
               loading: context.watch<AuthViewModel>().isLoading,

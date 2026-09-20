@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// Carousel of the selectable avatars: the chosen one sits centred and large,
 /// its neighbours peek in smaller on either side.
@@ -51,7 +52,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     return Column(
       children: [
         SizedBox(
-          height: _height,
+          height: context.h(_height),
           child: PageView.builder(
             controller: _controller,
             itemCount: _avatars.length,
@@ -59,7 +60,9 @@ class _AvatarPickerState extends State<AvatarPicker> {
             itemBuilder: (context, index) {
               final selected = index == _selected;
 
-              final size = selected ? _selectedSize : _unselectedSize;
+              final size = context.w(
+                selected ? _selectedSize : _unselectedSize,
+              );
 
               return Center(
                 child: AnimatedContainer(
@@ -72,10 +75,10 @@ class _AvatarPickerState extends State<AvatarPicker> {
             },
           ),
         ),
-        const SizedBox(height: 8),
-        const Text(
+        SizedBox(height: context.h(8)),
+        Text(
           'Avatar',
-          style: TextStyle(fontSize: 16, color: AppColors.white),
+          style: TextStyle(fontSize: context.sp(16), color: AppColors.white),
         ),
       ],
     );

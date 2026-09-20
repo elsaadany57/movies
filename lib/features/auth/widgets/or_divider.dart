@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// Yellow rule either side of the word OR.
 class OrDivider extends StatelessWidget {
@@ -8,16 +9,18 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const line = Expanded(child: Divider(color: AppColors.primary, height: 1));
+    final line = Expanded(
+      child: Divider(color: AppColors.primary, height: context.h(1)),
+    );
 
-    return const Row(
+    return Row(
       children: [
         line,
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: context.w(12)),
           child: Text(
             'OR',
-            style: TextStyle(fontSize: 16, color: AppColors.primary),
+            style: TextStyle(fontSize: context.sp(16), color: AppColors.primary),
           ),
         ),
         line,

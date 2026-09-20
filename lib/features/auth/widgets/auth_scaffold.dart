@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 
 /// Scrollable page body shared by the auth screens: the yellow back arrow and
 /// centred title appear only when [title] is given, which Login omits.
@@ -23,8 +24,8 @@ class AuthScaffold extends StatelessWidget {
               iconTheme: const IconThemeData(color: AppColors.primary),
               title: Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: context.sp(20),
                   fontWeight: FontWeight.w500,
                   color: AppColors.primary,
                 ),
@@ -32,7 +33,7 @@ class AuthScaffold extends StatelessWidget {
             ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: context.w(16)),
           child: child,
         ),
       ),

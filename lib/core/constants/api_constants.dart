@@ -7,6 +7,30 @@ class ApiConstants {
   static const movieDetails = '/movie_details.json';
   static const movieSuggestions = '/movie_suggestions.json';
 
+  /// Genres the browse tab offers as chips.
+  static const browseGenres = [
+    'Action',
+    'Adventure',
+    'Animation',
+    'Biography',
+    'Comedy',
+    'Crime',
+    'Documentary',
+    'Drama',
+    'Family',
+    'Fantasy',
+    'History',
+    'Horror',
+    'Music',
+    'Mystery',
+    'Romance',
+    'Sci-Fi',
+    'Sport',
+    'Thriller',
+    'War',
+    'Western',
+  ];
+
   /// Genres the home screen shows a row for, in order.
   static const homeGenres = [
     'Action',

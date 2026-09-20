@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_assets.dart';
 import '../theme/app_colors.dart';
+import '../utils/responsive.dart';
 
 /// The shared loading / error / empty body, so no screen invents its own.
 class AppStateView extends StatelessWidget {
@@ -30,19 +31,19 @@ class AppStateView extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(context.w(24)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(AppAssets.emptyPopcorn, width: 124),
-            const SizedBox(height: 16),
+            Image.asset(AppAssets.emptyPopcorn, width: context.w(124)),
+            SizedBox(height: context.h(16)),
             Text(
               message ?? 'Nothing here yet',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: AppColors.white),
+              style: TextStyle(fontSize: context.sp(16), color: AppColors.white),
             ),
             if (error != null && onRetry != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: context.h(16)),
               TextButton(
                 onPressed: onRetry,
                 child: const Text(

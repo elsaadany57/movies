@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../../core/utils/responsive.dart';
 import 'poster_background.dart';
 
 /// First onboarding page: poster collage, headline and "Explore Now".
@@ -27,32 +28,33 @@ class OnboardingIntroPage extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, math.max(bottomInset, 34)),
+            padding: EdgeInsets.fromLTRB(
+              context.w(16), 0, context.w(16), math.max(bottomInset, context.h(34))),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Find Your Next\nFavorite Movie Here',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 36,
+                    fontSize: context.sp(36),
                     fontWeight: FontWeight.w500,
                     height: 1.2,
                     color: AppColors.white,
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
+                SizedBox(height: context.h(16)),
+                Text(
                   'Get access to a huge library of movies\n'
                   'to suit all tastes. You will surely like it.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: context.sp(20),
                     height: 1.5,
                     color: AppColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: context.h(24)),
                 AppButton.filled(label: 'Explore Now', onPressed: onExplore),
               ],
             ),

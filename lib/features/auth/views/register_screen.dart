@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_button.dart';
 import '../widgets/auth_prompt.dart';
 import '../widgets/auth_scaffold.dart';
@@ -61,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const gap = SizedBox(height: 16);
+    final gap = SizedBox(height: context.h(16));
 
     return AuthScaffold(
       title: 'Register',
@@ -111,21 +112,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textInputAction: TextInputAction.done,
               validator: Validators.phone,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AppButton.filled(
               label: 'Create Account',
               loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _createAccount,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: context.h(16)),
             AuthPrompt(
               question: 'Already Have Account ?',
               action: 'Login',
               onTap: () => Navigator.of(context).pop(),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: context.h(16)),
             const LanguageToggle(),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
           ],
         ),
       ),

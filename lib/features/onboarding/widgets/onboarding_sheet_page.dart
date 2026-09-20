@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_button.dart';
 import '../models/onboarding_item.dart';
+import '../../../core/utils/responsive.dart';
 import 'poster_background.dart';
 
 /// Onboarding page with a poster on top and a rounded bottom sheet holding
@@ -37,10 +38,13 @@ class OnboardingSheetPage extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.fromLTRB(16, 32, 16, bottomInset + 16),
-            decoration: const BoxDecoration(
+            padding: EdgeInsets.fromLTRB(context.w(16), context.h(32),
+                context.w(16), bottomInset + context.h(16)),
+            decoration: BoxDecoration(
               color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(context.w(40)),
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -48,31 +52,31 @@ class OnboardingSheetPage extends StatelessWidget {
                 Text(
                   item.title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
+                  style: TextStyle(
+                    fontSize: context.sp(24),
                     fontWeight: FontWeight.w700,
                     color: AppColors.white,
                   ),
                 ),
                 if (description != null) ...[
-                  const SizedBox(height: 24),
+                  SizedBox(height: context.h(24)),
                   Text(
                     description,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: context.sp(20),
                       height: 1.2,
                       color: AppColors.white,
                     ),
                   ),
                 ],
-                const SizedBox(height: 24),
+                SizedBox(height: context.h(24)),
                 AppButton.filled(
                   label: isLast ? 'Finish' : 'Next',
                   onPressed: onNext,
                 ),
                 if (item.showBack) ...[
-                  const SizedBox(height: 16),
+                  SizedBox(height: context.h(16)),
                   AppButton.outlined(label: 'Back', onPressed: onBack),
                 ],
               ],

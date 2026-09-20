@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_button.dart';
 import '../widgets/auth_prompt.dart';
@@ -65,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             // The asset carries its own padding, so it needs no top gap.
-            Image.asset(AppAssets.appIcon),
+            Image.asset(AppAssets.appIcon, width: context.w(253)),
             AuthTextField(
               controller: _email,
               hint: 'Email',
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
               keyboardType: TextInputType.emailAddress,
               validator: Validators.email,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AuthTextField(
               controller: _password,
               hint: 'Password',
@@ -82,44 +83,44 @@ class _LoginScreenState extends State<LoginScreen> {
               textInputAction: TextInputAction.done,
               validator: Validators.password,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: context.h(8)),
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () => _open(const ForgetPasswordScreen()),
-                child: const Text(
+                child: Text(
                   'Forget Password ?',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: context.sp(14),
                     fontWeight: FontWeight.w500,
                     color: AppColors.primary,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AppButton.filled(
               label: 'Login',
               loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _login,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AuthPrompt(
               question: "Don't Have Account ?",
               action: 'Create One',
               onTap: () => _open(const RegisterScreen()),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             const OrDivider(),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             AppButton.filled(
               label: 'Login With Google',
               icon: const GoogleLogo(),
               onPressed: _loginWithGoogle,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
             const LanguageToggle(),
-            const SizedBox(height: 24),
+            SizedBox(height: context.h(24)),
           ],
         ),
       ),
