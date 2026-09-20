@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/network_poster.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../data/models/movie.dart';
@@ -29,6 +30,9 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
   /// whichever poster is centred.
   static const _minScale = 0.78;
 
+  /// Enough to soften the artwork without turning it to mush.
+  static const _blur = 8.0;
+
   late final _controller = PageController(viewportFraction: _viewport);
 
   int _selected = 0;
@@ -51,22 +55,27 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
-        // Blurred artwork of whichever poster is centred.
+        // The centred movie's own artwork, lightly blurred, dimmed by the
+        // gradient so it settles into the page background at the bottom.
         Positioned.fill(
-          child: ShaderMask(
-            shaderCallback: (rect) => const LinearGradient(
-              begin: Alignment.center,
-              end: Alignment.bottomCenter,
-              colors: [Colors.white, Colors.transparent],
-            ).createShader(rect),
-            blendMode: BlendMode.dstIn,
-            child: ImageFiltered(
-              imageFilter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-              child: Opacity(
-                opacity: 0.5,
-                child: NetworkPoster(url: backdrop.backgroundUrl),
-              ),
+          child: ImageFiltered(
+            imageFilter: ui.ImageFilter.blur(
+              sigmaX: _blur,
+              sigmaY: _blur,
+              tileMode: TileMode.decal,
             ),
+            // The poster art, not the wide `background_image`: the design
+            // blows up the same artwork as the centred card, and a cover
+            // image is always present where a backdrop sometimes is not.
+            child: NetworkPoster(
+              key: ValueKey(backdrop.id),
+              url: backdrop.coverUrl,
+            ),
+          ),
+        ),
+        const Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(gradient: AppColors.featuredFade),
           ),
         ),
         Column(

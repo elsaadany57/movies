@@ -31,6 +31,15 @@ class AppColors {
     colors: [Color(0x00121312), background],
   );
 
+  /// Sits over the featured movie's blurred artwork on the home screen, so
+  /// the posters and script headings stay readable against any backdrop.
+  static const featuredFade = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xCC121312), Color(0x99121312), background],
+    stops: [0, 0.465, 1],
+  );
+
   /// Stronger fade for the intro collage so the headline stays readable.
   static const introFade = LinearGradient(
     begin: Alignment.topCenter,
