@@ -6,17 +6,29 @@ import '../theme/app_theme.dart';
 /// Full-width pill button from the design. [AppButton.filled] is the yellow
 /// primary action, [AppButton.outlined] the yellow-bordered secondary one.
 class AppButton extends StatelessWidget {
-  const AppButton.filled({super.key, required this.label, required this.onPressed})
-      : _outlined = false;
+  const AppButton.filled({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.icon,
+  }) : _outlined = false;
 
-  const AppButton.outlined({super.key, required this.label, required this.onPressed})
-      : _outlined = true;
+  const AppButton.outlined({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.icon,
+  }) : _outlined = true;
 
   final String label;
   final VoidCallback onPressed;
+
+  /// Drawn before the label, as on the "Login With Google" button.
+  final Widget? icon;
   final bool _outlined;
 
   static const _height = 55.0;
+  static const _padding = EdgeInsets.symmetric(horizontal: 12);
   static final _shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(16));
   // A ButtonStyle textStyle replaces the theme's outright instead of merging
   // with it, so the family has to be named here too.
@@ -28,7 +40,19 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = Text(label);
+    final icon = this.icon;
+    final child = icon == null
+        ? Text(label)
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon,
+              const SizedBox(width: 12),
+              // Flexible so a long label ellipsises instead of overflowing
+              // the row on a narrow screen.
+              Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+            ],
+          );
 
     return SizedBox(
       width: double.infinity,
@@ -41,6 +65,7 @@ class AppButton extends StatelessWidget {
                 side: const BorderSide(color: AppColors.primary, width: 1.5),
                 shape: _shape,
                 textStyle: _textStyle,
+                padding: _padding,
               ),
               child: child,
             )
@@ -51,6 +76,7 @@ class AppButton extends StatelessWidget {
                 foregroundColor: AppColors.background,
                 shape: _shape,
                 textStyle: _textStyle,
+                padding: _padding,
               ),
               child: child,
             ),
