@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/validators.dart';
@@ -8,6 +9,8 @@ import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/avatar_picker.dart';
 import '../widgets/language_toggle.dart';
+import '../utils/auth_action.dart';
+import '../view_models/auth_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -24,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPassword = TextEditingController();
   final _phone = TextEditingController();
 
-  int _avatar = 0;
+  int _avatar = AvatarPicker.defaultIndex;
 
   @override
   void dispose() {
@@ -40,10 +43,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _createAccount() {
-    if (!_formKey.currentState!.validate()) return;
-    debugPrint('Registering with avatar $_avatar');
-    // TODO: create the Firebase account, storing the avatar on the profile.
+  Future<void> _createAccount() {
+    return submitAuthForm(
+      context,
+      formKey: _formKey,
+      action: (vm) => vm.register(
+        name: _name.text.trim(),
+        email: _email.text.trim(),
+        password: _password.text,
+        phone: _phone.text.trim(),
+        avatar: _avatar,
+      ),
+      successMessage: 'Account created. Please log in.',
+      onSuccess: () => Navigator.of(context).pop(),
+    );
   }
 
   @override
@@ -101,6 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 24),
             AppButton.filled(
               label: 'Create Account',
+              loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _createAccount,
             ),
             const SizedBox(height: 16),

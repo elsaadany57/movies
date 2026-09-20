@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_button.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_text_field.dart';
+import '../utils/auth_action.dart';
+import '../view_models/auth_view_model.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -23,9 +26,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     super.dispose();
   }
 
-  void _verify() {
-    if (!_formKey.currentState!.validate()) return;
-    // TODO: send the Firebase password-reset email.
+  Future<void> _verify() {
+    return submitAuthForm(
+      context,
+      formKey: _formKey,
+      action: (vm) => vm.sendPasswordReset(_email.text.trim()),
+      successMessage: 'Reset link sent. Check your inbox.',
+      onSuccess: () => Navigator.of(context).pop(),
+    );
   }
 
   @override
@@ -48,7 +56,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               validator: Validators.email,
             ),
             const SizedBox(height: 24),
-            AppButton.filled(label: 'Verify Email', onPressed: _verify),
+            AppButton.filled(
+              label: 'Verify Email',
+              loading: context.watch<AuthViewModel>().isLoading,
+              onPressed: _verify,
+            ),
           ],
         ),
       ),

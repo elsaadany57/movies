@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
@@ -10,6 +11,9 @@ import '../widgets/auth_text_field.dart';
 import '../widgets/google_logo.dart';
 import '../widgets/language_toggle.dart';
 import '../widgets/or_divider.dart';
+import '../utils/auth_action.dart';
+import '../view_models/auth_view_model.dart';
+import '../../movies/views/movies_screen.dart';
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
 
@@ -32,9 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _login() {
-    if (!_formKey.currentState!.validate()) return;
-    // TODO: sign in through Firebase.
+  Future<void> _login() {
+    return submitAuthForm(
+      context,
+      formKey: _formKey,
+      action: (vm) => vm.login(_email.text.trim(), _password.text),
+      onSuccess: () => Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(builder: (_) => const MoviesScreen()),
+      ),
+    );
   }
 
   void _loginWithGoogle() {
@@ -88,7 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            AppButton.filled(label: 'Login', onPressed: _login),
+            AppButton.filled(
+              label: 'Login',
+              loading: context.watch<AuthViewModel>().isLoading,
+              onPressed: _login,
+            ),
             const SizedBox(height: 24),
             AuthPrompt(
               question: "Don't Have Account ?",

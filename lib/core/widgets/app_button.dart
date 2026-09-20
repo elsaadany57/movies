@@ -11,6 +11,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
+    this.loading = false,
   }) : _outlined = false;
 
   const AppButton.outlined({
@@ -18,6 +19,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
+    this.loading = false,
   }) : _outlined = true;
 
   final String label;
@@ -25,6 +27,9 @@ class AppButton extends StatelessWidget {
 
   /// Drawn before the label, as on the "Login With Google" button.
   final Widget? icon;
+
+  /// Swaps the label for a spinner and refuses taps while an action runs.
+  final bool loading;
   final bool _outlined;
 
   static const _height = 55.0;
@@ -41,25 +46,32 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icon = this.icon;
-    final child = icon == null
-        ? Text(label)
-        : Row(
+    final label = loading
+        ? const SizedBox.square(
+            dimension: 24,
+            child: CircularProgressIndicator(strokeWidth: 2.5),
+          )
+        : null;
+    final child = label ??
+        (icon == null
+            ? Text(this.label)
+            : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               icon,
               const SizedBox(width: 12),
               // Flexible so a long label ellipsises instead of overflowing
               // the row on a narrow screen.
-              Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+              Flexible(child: Text(this.label, overflow: TextOverflow.ellipsis)),
             ],
-          );
+          ));
 
     return SizedBox(
       width: double.infinity,
       height: _height,
       child: _outlined
           ? OutlinedButton(
-              onPressed: onPressed,
+              onPressed: loading ? null : onPressed,
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary, width: 1.5),
@@ -70,7 +82,7 @@ class AppButton extends StatelessWidget {
               child: child,
             )
           : FilledButton(
-              onPressed: onPressed,
+              onPressed: loading ? null : onPressed,
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.background,
