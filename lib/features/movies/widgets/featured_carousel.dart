@@ -20,8 +20,14 @@ class FeaturedCarousel extends StatefulWidget {
 }
 
 class _FeaturedCarouselState extends State<FeaturedCarousel> {
-  static const _viewport = 0.62;
+  /// Narrower than the card so neighbours tuck in behind the centred one,
+  /// the way the design overlaps them.
+  static const _viewport = 0.52;
   static const _cardWidth = 238.0;
+
+  /// Measured off the design: the neighbours stand about 78% as tall as
+  /// whichever poster is centred.
+  static const _minScale = 0.78;
 
   late final _controller = PageController(viewportFraction: _viewport);
 
@@ -74,7 +80,10 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
                 controller: _controller,
                 itemCount: movies.length,
                 onPageChanged: (i) => setState(() => _selected = i),
-                itemBuilder: (_, i) => Center(
+                itemBuilder: (_, i) => _Scaled(
+                  controller: _controller,
+                  index: i,
+                  fallbackSelected: _selected,
                   child: MoviePosterCard(movie: movies[i], width: cardWidth),
                 ),
               ),
@@ -85,6 +94,45 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Shrinks a page as it moves away from centre, so the focused poster stands
+/// taller than its neighbours. Tracks the controller rather than the settled
+/// page, so the size follows the finger mid-swipe.
+class _Scaled extends StatelessWidget {
+  const _Scaled({
+    required this.controller,
+    required this.index,
+    required this.fallbackSelected,
+    required this.child,
+  });
+
+  final PageController controller;
+  final int index;
+
+  /// Used until the controller has been laid out and knows its page.
+  final int fallbackSelected;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        final hasPage =
+            controller.hasClients && controller.position.haveDimensions;
+        final page = hasPage
+            ? (controller.page ?? fallbackSelected.toDouble())
+            : fallbackSelected.toDouble();
+
+        final distance = (page - index).abs().clamp(0.0, 1.0);
+        final scale = 1 - (1 - _FeaturedCarouselState._minScale) * distance;
+
+        return Center(child: Transform.scale(scale: scale, child: child));
+      },
+      child: child,
     );
   }
 }
