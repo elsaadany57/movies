@@ -6,7 +6,7 @@ import 'package:movies_app/data/repositories/auth_repository.dart';
 import 'package:movies_app/data/repositories/movie_repository.dart';
 import 'package:movies_app/data/services/movie_service.dart';
 import 'package:movies_app/features/auth/view_models/auth_view_model.dart';
-import 'package:movies_app/features/movies/view_models/movies_view_model.dart';
+import 'package:movies_app/features/movies/view_models/home_view_model.dart';
 import 'package:movies_app/features/auth/views/login_screen.dart';
 import 'package:movies_app/features/onboarding/views/onboarding_screen.dart';
 import 'package:provider/provider.dart';
@@ -49,11 +49,14 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
+    final repository = MovieRepository(MovieService());
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
+          Provider<MovieRepository>.value(value: repository),
           ChangeNotifierProvider(
-            create: (_) => MoviesViewModel(MovieRepository(MovieService())),
+            create: (_) => HomeViewModel(repository),
           ),
           ChangeNotifierProvider(
             create: (_) => AuthViewModel(_FakeAuthRepository()),

@@ -13,7 +13,7 @@ import '../widgets/language_toggle.dart';
 import '../widgets/or_divider.dart';
 import '../utils/auth_action.dart';
 import '../view_models/auth_view_model.dart';
-import '../../movies/views/movies_screen.dart';
+import '../../movies/views/main_screen.dart';
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
 
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       formKey: _formKey,
       action: (vm) => vm.login(_email.text.trim(), _password.text),
       onSuccess: () => Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(builder: (_) => const MoviesScreen()),
+        MaterialPageRoute<void>(builder: (_) => const MainScreen()),
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'data/repositories/movie_repository.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/movie_service.dart';
 import 'features/auth/view_models/auth_view_model.dart';
-import 'features/movies/view_models/movies_view_model.dart';
+import 'features/movies/view_models/home_view_model.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -24,8 +24,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider.value(value: movieRepository),
         ChangeNotifierProvider(
-          create: (_) => MoviesViewModel(movieRepository),
+          create: (_) => HomeViewModel(movieRepository),
         ),
         ChangeNotifierProvider(
           create: (_) => AuthViewModel(authRepository),
