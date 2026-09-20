@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+
+import '../../../core/constants/app_assets.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/validators.dart';
+import '../../../core/widgets/app_button.dart';
+import '../widgets/auth_prompt.dart';
+import '../widgets/auth_scaffold.dart';
+import '../widgets/auth_text_field.dart';
+import '../widgets/google_logo.dart';
+import '../widgets/language_toggle.dart';
+import '../widgets/or_divider.dart';
+import 'forget_password_screen.dart';
+import 'register_screen.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  void _login() {
+    if (!_formKey.currentState!.validate()) return;
+    // TODO: sign in through Firebase.
+  }
+
+  void _loginWithGoogle() {
+    // TODO: sign in through Firebase with the Google provider.
+  }
+
+  void _open(Widget screen) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => screen),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthScaffold(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            // The asset carries its own padding, so it needs no top gap.
+            Image.asset(AppAssets.appIcon),
+            AuthTextField(
+              controller: _email,
+              hint: 'Email',
+              icon: AppAssets.icEmail,
+              keyboardType: TextInputType.emailAddress,
+              validator: Validators.email,
+            ),
+            const SizedBox(height: 24),
+            AuthTextField(
+              controller: _password,
+              hint: 'Password',
+              icon: AppAssets.icPassword,
+              obscure: true,
+              textInputAction: TextInputAction.done,
+              validator: Validators.password,
+            ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () => _open(const ForgetPasswordScreen()),
+                child: const Text(
+                  'Forget Password ?',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            AppButton.filled(label: 'Login', onPressed: _login),
+            const SizedBox(height: 24),
+            AuthPrompt(
+              question: "Don't Have Account ?",
+              action: 'Create One',
+              onTap: () => _open(const RegisterScreen()),
+            ),
+            const SizedBox(height: 24),
+            const OrDivider(),
+            const SizedBox(height: 24),
+            AppButton.filled(
+              label: 'Login With Google',
+              icon: const GoogleLogo(),
+              onPressed: _loginWithGoogle,
+            ),
+            const SizedBox(height: 24),
+            const LanguageToggle(),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
