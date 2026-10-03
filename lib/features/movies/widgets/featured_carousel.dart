@@ -4,27 +4,36 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/network_poster.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/widgets/network_poster.dart';
 import '../../../data/models/movie.dart';
 import 'movie_poster_card.dart';
 
 /// The top of the home screen: the selected movie's artwork blurred behind
 /// "Available Now", a swipeable poster carousel, and the "Watch Now" script.
+///
+/// The carousel loops, so the centred poster always has a neighbour on each
+/// side, as in the design, including on the very first one.
 class FeaturedCarousel extends StatefulWidget {
   const FeaturedCarousel({super.key, required this.movies});
 
   final List<Movie> movies;
+
+  /// Below this a loop would show the same poster twice in one view.
+  static const minMoviesToLoop = 3;
 
   @override
   State<FeaturedCarousel> createState() => _FeaturedCarouselState();
 }
 
 class _FeaturedCarouselState extends State<FeaturedCarousel> {
-  /// Narrower than the card so neighbours tuck in behind the centred one,
-  /// the way the design overlaps them.
-  static const _viewport = 0.52;
   static const _cardWidth = 238.0;
+
+  /// Distance between the centres of two neighbouring posters, measured off
+  /// the design. A touch narrower than the card, so the centred poster sits
+  /// just inside its slot and the neighbours are cut by the screen edge.
+  static const _pageSpacing = 232.0;
+  static const _viewport = _pageSpacing / Responsive.designWidth;
 
   /// Measured off the design: the neighbours stand about 78% as tall as
   /// whichever poster is centred.
@@ -33,7 +42,17 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
   /// Enough to soften the artwork without turning it to mush.
   static const _blur = 8.0;
 
-  late final _controller = PageController(viewportFraction: _viewport);
+  /// How far into the infinite page range to start, so there is room to
+  /// swipe backwards from the first poster. A multiple of the length keeps
+  /// the first poster centred.
+  static const _loopOffset = 1000;
+
+  bool get _loops => widget.movies.length >= FeaturedCarousel.minMoviesToLoop;
+
+  late final _controller = PageController(
+    viewportFraction: _viewport,
+    initialPage: _loops ? widget.movies.length * _loopOffset : 0,
+  );
 
   int _selected = 0;
 
@@ -87,13 +106,17 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
               height: cardHeight,
               child: PageView.builder(
                 controller: _controller,
-                itemCount: movies.length,
-                onPageChanged: (i) => setState(() => _selected = i),
-                itemBuilder: (_, i) => _Scaled(
+                // Null means endless, which is what makes it loop.
+                itemCount: _loops ? null : movies.length,
+                onPageChanged: (page) =>
+                    setState(() => _selected = page % movies.length),
+                itemBuilder: (_, page) => _Scaled(
                   controller: _controller,
-                  index: i,
-                  fallbackSelected: _selected,
-                  child: MoviePosterCard(movie: movies[i], width: cardWidth),
+                  page: page,
+                  child: MoviePosterCard(
+                    movie: movies[page % movies.length],
+                    width: cardWidth,
+                  ),
                 ),
               ),
             ),
@@ -113,16 +136,15 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
 class _Scaled extends StatelessWidget {
   const _Scaled({
     required this.controller,
-    required this.index,
-    required this.fallbackSelected,
+    required this.page,
     required this.child,
   });
 
   final PageController controller;
-  final int index;
 
-  /// Used until the controller has been laid out and knows its page.
-  final int fallbackSelected;
+  /// This widget's raw page number, not the movie index: with looping the
+  /// two differ.
+  final int page;
   final Widget child;
 
   @override
@@ -130,13 +152,13 @@ class _Scaled extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        final hasPage =
-            controller.hasClients && controller.position.haveDimensions;
-        final page = hasPage
-            ? (controller.page ?? fallbackSelected.toDouble())
-            : fallbackSelected.toDouble();
+        // Until the first layout the controller has no position, so the
+        // page it was told to start on is the best answer.
+        final current = controller.hasClients && controller.position.haveDimensions
+            ? (controller.page ?? controller.initialPage.toDouble())
+            : controller.initialPage.toDouble();
 
-        final distance = (page - index).abs().clamp(0.0, 1.0);
+        final distance = (current - page).abs().clamp(0.0, 1.0);
         final scale = 1 - (1 - _FeaturedCarouselState._minScale) * distance;
 
         return Center(child: Transform.scale(scale: scale, child: child));
