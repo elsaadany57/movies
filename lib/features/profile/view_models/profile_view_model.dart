@@ -2,13 +2,16 @@ import 'package:flutter/foundation.dart';
 
 import '../../../data/models/app_user.dart';
 import '../../../data/repositories/auth_repository.dart';
+import 'library_view_model.dart';
 
-/// Holds the signed-in user's profile and the two lists the profile tabs
-/// show. The lists are local for now; nothing persists them yet.
+/// Holds the signed-in user's profile. Their watch list and history live in
+/// [LibraryViewModel]; this only makes sure they are wiped when the account
+/// goes away, so the next person to sign in never sees them.
 class ProfileViewModel extends ChangeNotifier {
-  ProfileViewModel(this._repository);
+  ProfileViewModel(this._repository, this._library);
 
   final AuthRepository _repository;
+  final LibraryViewModel _library;
 
   AppUser? _user;
   bool _isLoading = false;
@@ -17,10 +20,6 @@ class ProfileViewModel extends ChangeNotifier {
   AppUser? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
-
-  // TODO: persist these once the watchlist has a home in Firestore.
-  final List<int> watchList = [];
-  final List<int> history = [];
 
   Future<void> load() async {
     _isLoading = true;
@@ -63,15 +62,23 @@ class ProfileViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> signOut() => _repository.signOut();
+  Future<void> signOut() async {
+    await _repository.signOut();
+    _forget();
+  }
 
   Future<bool> deleteAccount() async {
     try {
       await _repository.deleteAccount();
-      _user = null;
+      _forget();
       return true;
     } catch (_) {
       return false;
     }
+  }
+
+  void _forget() {
+    _user = null;
+    _library.clear();
   }
 }

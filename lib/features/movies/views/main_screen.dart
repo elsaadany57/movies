@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../profile/view_models/library_view_model.dart';
 import '../../profile/views/profile_screen.dart';
 import '../widgets/app_bottom_nav.dart';
 import 'browse_screen.dart';
@@ -16,6 +18,16 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetched here, once the user is signed in, so the bookmark on a movie
+    // already knows whether it is saved by the time anyone opens one.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<LibraryViewModel>().load();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

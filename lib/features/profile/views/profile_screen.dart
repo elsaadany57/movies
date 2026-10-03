@@ -7,7 +7,9 @@ import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_state_view.dart';
 import '../../auth/views/login_screen.dart';
+import '../../../data/models/movie.dart';
 import '../../movies/widgets/movie_grid.dart';
+import '../view_models/library_view_model.dart';
 import '../view_models/profile_view_model.dart';
 import 'update_profile_screen.dart';
 
@@ -50,6 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ProfileViewModel>();
+    final library = context.watch<LibraryViewModel>();
     final user = vm.user;
 
     if (user == null) {
@@ -92,13 +95,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ),
                     Expanded(
                       child: _Count(
-                        value: vm.watchList.length,
+                        value: library.watchList.length,
                         label: 'Wish List',
                       ),
                     ),
                     Expanded(
                       child: _Count(
-                        value: vm.history.length,
+                        value: library.history.length,
                         label: 'History',
                       ),
                     ),
@@ -153,8 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: TabBarView(
               controller: _tabs,
               children: [
-                _List(ids: vm.watchList),
-                _List(ids: vm.history),
+                _MovieList(movies: library.watchList),
+                _MovieList(movies: library.history),
               ],
             ),
           ),
@@ -207,15 +210,22 @@ class _Count extends StatelessWidget {
   }
 }
 
-class _List extends StatelessWidget {
-  const _List({required this.ids});
+/// One tab's grid of posters, or the shared state view while it loads, fails
+/// or has nothing to show yet.
+class _MovieList extends StatelessWidget {
+  const _MovieList({required this.movies});
 
-  final List<int> ids;
+  final List<Movie> movies;
 
   @override
   Widget build(BuildContext context) {
-    // Nothing is stored yet, so this is always the empty state for now.
-    if (ids.isEmpty) return const AppStateView();
-    return MovieGrid(movies: const [], columns: 3);
+    if (movies.isNotEmpty) return MovieGrid(movies: movies, columns: 3);
+
+    final library = context.watch<LibraryViewModel>();
+    return AppStateView(
+      isLoading: library.isLoading,
+      error: library.hasError ? 'Could not load your movies' : null,
+      onRetry: context.read<LibraryViewModel>().load,
+    );
   }
 }

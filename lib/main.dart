@@ -4,13 +4,16 @@ import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/library_repository.dart';
 import 'data/repositories/movie_repository.dart';
 import 'data/services/auth_service.dart';
+import 'data/services/library_service.dart';
 import 'data/services/movie_service.dart';
 import 'features/auth/view_models/auth_view_model.dart';
 import 'features/movies/view_models/browse_view_model.dart';
 import 'features/movies/view_models/home_view_model.dart';
 import 'features/movies/view_models/search_view_model.dart';
+import 'features/profile/view_models/library_view_model.dart';
 import 'features/profile/view_models/profile_view_model.dart';
 import 'firebase_options.dart';
 
@@ -22,7 +25,11 @@ Future<void> main() async {
 
   // Dependency wiring: Service -> Repository -> ViewModel -> View
   final movieRepository = MovieRepository(MovieService());
-  final authRepository = AuthRepository(AuthService());
+  final authService = AuthService();
+  final authRepository = AuthRepository(authService);
+  final libraryViewModel = LibraryViewModel(
+    LibraryRepository(LibraryService(authService)),
+  );
 
   runApp(
     MultiProvider(
@@ -37,8 +44,9 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => BrowseViewModel(movieRepository),
         ),
+        ChangeNotifierProvider.value(value: libraryViewModel),
         ChangeNotifierProvider(
-          create: (_) => ProfileViewModel(authRepository),
+          create: (_) => ProfileViewModel(authRepository, libraryViewModel),
         ),
         ChangeNotifierProvider(
           create: (_) => AuthViewModel(authRepository),

@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/app_snackbar.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_button.dart';
-import '../../auth/utils/auth_action.dart';
 import '../../auth/views/forget_password_screen.dart';
 import '../../auth/views/login_screen.dart';
 import '../../auth/widgets/auth_scaffold.dart';
@@ -51,7 +51,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (!mounted) return;
 
     setState(() => _saving = false);
-    showAuthMessage(
+    showAppMessage(
       context,
       ok ? 'Profile updated' : 'Could not update your profile',
       isError: !ok,
@@ -91,7 +91,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (!mounted) return;
 
     if (!ok) {
-      showAuthMessage(context, 'Could not delete your account. Sign in again.');
+      showAppMessage(context, 'Could not delete your account. Sign in again.');
       return;
     }
     Navigator.of(context).pushAndRemoveUntil(

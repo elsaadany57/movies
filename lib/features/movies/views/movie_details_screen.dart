@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/app_snackbar.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_state_view.dart';
 import '../../../core/widgets/network_poster.dart';
 import '../../../data/models/movie.dart';
 import '../../../data/repositories/movie_repository.dart';
+import '../../profile/view_models/library_view_model.dart';
 import '../view_models/movie_details_view_model.dart';
 import '../widgets/cast_tile.dart';
 import '../widgets/genre_chip.dart';
@@ -63,7 +65,7 @@ class _Content extends StatelessWidget {
         ListView(
           padding: EdgeInsets.zero,
           children: [
-            _Backdrop(movie: movie),
+            _Backdrop(movie: movie, onPlay: () => _watch(context, movie)),
             SizedBox(height: context.h(24)),
             Padding(
               padding: sidePadding,
@@ -90,8 +92,7 @@ class _Content extends StatelessWidget {
                   AppButton.filled(
                     label: 'Watch',
                     color: AppColors.red,
-                    // TODO: open the trailer once a player is picked.
-                    onPressed: () {},
+                    onPressed: () => _watch(context, movie),
                   ),
                   SizedBox(height: context.h(16)),
                   _StatsRow(movie: movie),
@@ -155,7 +156,7 @@ class _Content extends StatelessWidget {
             SizedBox(height: context.h(32)),
           ],
         ),
-        const _TopBar(),
+        _TopBar(movie: movie),
       ],
     );
   }
@@ -191,9 +192,10 @@ class _Heading extends StatelessWidget {
 }
 
 class _Backdrop extends StatelessWidget {
-  const _Backdrop({required this.movie});
+  const _Backdrop({required this.movie, required this.onPlay});
 
   final Movie movie;
+  final VoidCallback onPlay;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +208,10 @@ class _Backdrop extends StatelessWidget {
           const DecoratedBox(
             decoration: BoxDecoration(gradient: AppColors.backgroundFade),
           ),
-          if (movie.hasTrailer) const Center(child: _PlayButton()),
+          if (movie.hasTrailer)
+            Center(
+              child: GestureDetector(onTap: onPlay, child: const _PlayButton()),
+            ),
         ],
       ),
     );
@@ -237,10 +242,16 @@ class _PlayButton extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar();
+  const _TopBar({required this.movie});
+
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
+    final saved = context.select<LibraryViewModel, bool>(
+      (library) => library.isSaved(movie.id),
+    );
+
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: context.w(8)),
@@ -256,10 +267,9 @@ class _TopBar extends StatelessWidget {
               ),
             ),
             IconButton(
-              // TODO: persist the watchlist once the profile tab stores it.
-              onPressed: () {},
+              onPressed: () => _toggleWatchList(context, movie),
               icon: Icon(
-                Icons.bookmark,
+                saved ? Icons.bookmark : Icons.bookmark_border,
                 color: AppColors.white,
                 size: context.w(28),
               ),
@@ -293,4 +303,26 @@ class _StatsRow extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Pressing Watch, from either the red button or the play circle, adds the
+/// movie to the user's history. There is no player yet, so this is all it does.
+void _watch(BuildContext context, Movie movie) {
+  context.read<LibraryViewModel>().addToHistory(movie);
+  showAppMessage(context, 'Added to your History', isError: false);
+}
+
+Future<void> _toggleWatchList(BuildContext context, Movie movie) async {
+  final saved = await context.read<LibraryViewModel>().toggleWatchList(movie);
+  if (!context.mounted) return;
+
+  showAppMessage(
+    context,
+    switch (saved) {
+      null => 'Could not update your Watch List',
+      true => 'Added to your Watch List',
+      false => 'Removed from your Watch List',
+    },
+    isError: saved == null,
+  );
 }

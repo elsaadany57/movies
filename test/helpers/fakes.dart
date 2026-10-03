@@ -2,12 +2,14 @@ import 'package:movies_app/data/models/app_user.dart';
 import 'package:movies_app/data/models/movie.dart';
 import 'package:movies_app/data/repositories/auth_repository.dart';
 import 'package:movies_app/data/repositories/library_repository.dart';
+import 'package:movies_app/data/repositories/movie_repository.dart';
 import 'package:movies_app/data/services/library_service.dart';
 
 /// A movie with just enough filled in to draw a poster.
-Movie fakeMovie(int id, {String? title}) => Movie(
+Movie fakeMovie(int id, {String? title, bool trailer = false}) => Movie(
       id: id,
       title: title ?? 'Movie $id',
+      trailerCode: trailer ? 'abc123' : null,
       year: 2020,
       rating: 7.7,
       runtime: 100,
@@ -111,4 +113,25 @@ class FakeLibraryRepository implements LibraryRepository {
   @override
   Future<void> addToHistory(Movie movie) async =>
       _put(LibraryService.history, movie);
+}
+
+/// Answers every movie request from memory, so screens render without a
+/// network. Details always return a movie with a trailer.
+class FakeMovieRepository implements MovieRepository {
+  @override
+  Future<Movie> getMovieDetails(int id) async => fakeMovie(id, trailer: true);
+
+  @override
+  Future<List<Movie>> getSuggestions(int id) async => [fakeMovie(id + 100)];
+
+  @override
+  Future<List<Movie>> getMovies({
+    String? genre,
+    String? queryTerm,
+    int limit = 20,
+    int page = 1,
+    String sortBy = 'date_added',
+    int minimumRating = 0,
+  }) async =>
+      [fakeMovie(1), fakeMovie(2)];
 }
