@@ -14,7 +14,7 @@ class AppAssets {
 
   static const forgetPassword = '$_images/auth/forget_password.png';
 
-  /// Every selectable avatar, in the order the pickers show them.
+  /// Every selectable avatar, in the order of the design's 3x3 picker grid.
   static const avatars = [
     '$_images/avatars/avatar_1.png',
     '$_images/avatars/avatar_2.png',
@@ -25,10 +25,12 @@ class AppAssets {
     '$_images/avatars/avatar_7.png',
     '$_images/avatars/avatar_8.png',
     '$_images/avatars/avatar_9.png',
-    '$_images/avatars/avatar_10.png',
-    '$_images/avatars/avatar_11.png',
-    '$_images/avatars/avatar_12.png',
   ];
+
+  /// The one the register carousel opens on: the red-hoodie avatar, which the
+  /// design shows centred. A stored index is a position in [avatars], so
+  /// reordering or removing one means migrating what accounts have saved.
+  static const defaultAvatar = 7;
 
   /// Falls back to the first avatar when a stored index is out of range.
   static String avatarAt(int index) =>
