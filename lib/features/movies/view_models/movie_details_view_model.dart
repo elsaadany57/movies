@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../data/models/movie.dart';
 import '../../../data/repositories/movie_repository.dart';
+import '../../../core/errors/load_error.dart';
 
 /// Loads one movie plus the API's four suggestions for it.
 class MovieDetailsViewModel extends ChangeNotifier {
@@ -12,12 +13,12 @@ class MovieDetailsViewModel extends ChangeNotifier {
   Movie? _movie;
   List<Movie> _suggestions = [];
   bool _isLoading = false;
-  String? _error;
+  LoadError? _error;
 
   Movie? get movie => _movie;
   List<Movie> get suggestions => _suggestions;
   bool get isLoading => _isLoading;
-  String? get error => _error;
+  LoadError? get error => _error;
 
   Future<void> load(int id) async {
     _isLoading = true;
@@ -32,7 +33,7 @@ class MovieDetailsViewModel extends ChangeNotifier {
       _movie = results[0] as Movie;
       _suggestions = results[1] as List<Movie>;
     } catch (_) {
-      _error = 'Could not load this movie';
+      _error = LoadError.movie;
     } finally {
       _isLoading = false;
       notifyListeners();

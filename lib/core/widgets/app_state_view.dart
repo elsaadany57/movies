@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_assets.dart';
+import '../errors/load_error.dart';
+import '../localization/l10n.dart';
 import '../theme/app_colors.dart';
 import '../utils/responsive.dart';
 
@@ -15,7 +17,11 @@ class AppStateView extends StatelessWidget {
   });
 
   final bool isLoading;
-  final String? error;
+
+  /// Why loading failed; shown in the current language with a retry button.
+  final LoadError? error;
+
+  /// What to say when there is simply nothing to show (already translated).
   final String? emptyMessage;
   final VoidCallback? onRetry;
 
@@ -27,7 +33,8 @@ class AppStateView extends StatelessWidget {
       );
     }
 
-    final message = error ?? emptyMessage;
+    final l10n = context.l10n;
+    final message = error?.message(l10n) ?? emptyMessage ?? l10n.nothingHereYet;
 
     return Center(
       child: Padding(
@@ -38,7 +45,7 @@ class AppStateView extends StatelessWidget {
             Image.asset(AppAssets.emptyPopcorn, width: context.w(124)),
             SizedBox(height: context.h(16)),
             Text(
-              message ?? 'Nothing here yet',
+              message,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: context.sp(16), color: AppColors.white),
             ),
@@ -46,9 +53,9 @@ class AppStateView extends StatelessWidget {
               SizedBox(height: context.h(16)),
               TextButton(
                 onPressed: onRetry,
-                child: const Text(
-                  'Try again',
-                  style: TextStyle(color: AppColors.primary),
+                child: Text(
+                  l10n.tryAgain,
+                  style: const TextStyle(color: AppColors.primary),
                 ),
               ),
             ],

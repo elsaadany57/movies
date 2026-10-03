@@ -12,6 +12,7 @@ import '../widgets/avatar_picker.dart';
 import '../widgets/language_toggle.dart';
 import '../utils/auth_action.dart';
 import '../view_models/auth_view_model.dart';
+import '../../../core/localization/l10n.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -55,17 +56,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         phone: _phone.text.trim(),
         avatar: _avatar,
       ),
-      successMessage: 'Account created. Please log in.',
+      successMessage: context.l10n.accountCreated,
       onSuccess: () => Navigator.of(context).pop(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final validators = Validators(l10n);
     final gap = SizedBox(height: context.h(16));
 
     return AuthScaffold(
-      title: 'Register',
+      title: l10n.register,
       child: Form(
         key: _formKey,
         child: Column(
@@ -74,54 +77,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
             gap,
             AuthTextField(
               controller: _name,
-              hint: 'Name',
+              hint: l10n.name,
               icon: AppAssets.icName,
-              validator: (value) => Validators.required(value, 'name'),
+              validator: validators.name,
             ),
             gap,
             AuthTextField(
               controller: _email,
-              hint: 'Email',
+              hint: l10n.email,
               icon: AppAssets.icEmail,
               keyboardType: TextInputType.emailAddress,
-              validator: Validators.email,
+              validator: validators.email,
             ),
             gap,
             AuthTextField(
               controller: _password,
-              hint: 'Password',
+              hint: l10n.password,
               icon: AppAssets.icPassword,
               obscure: true,
-              validator: Validators.password,
+              validator: validators.password,
             ),
             gap,
             AuthTextField(
               controller: _confirmPassword,
-              hint: 'Confirm Password',
+              hint: l10n.confirmPassword,
               icon: AppAssets.icPassword,
               obscure: true,
               validator: (value) =>
-                  Validators.confirmPassword(value, _password.text),
+                  validators.confirmPassword(value, _password.text),
             ),
             gap,
             AuthTextField(
               controller: _phone,
-              hint: 'Phone Number',
+              hint: l10n.phoneNumber,
               icon: AppAssets.icPhone,
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
-              validator: Validators.phone,
+              validator: validators.phone,
             ),
             SizedBox(height: context.h(24)),
             AppButton.filled(
-              label: 'Create Account',
+              label: l10n.createAccount,
               loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _createAccount,
             ),
             SizedBox(height: context.h(16)),
             AuthPrompt(
-              question: 'Already Have Account ?',
-              action: 'Login',
+              question: l10n.haveAccount,
+              action: l10n.login,
               onTap: () => Navigator.of(context).pop(),
             ),
             SizedBox(height: context.h(16)),

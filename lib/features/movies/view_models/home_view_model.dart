@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../data/models/movie.dart';
 import '../../../data/repositories/movie_repository.dart';
+import '../../../core/errors/load_error.dart';
 
 /// One horizontal row on the home screen.
 class GenreRow {
@@ -22,12 +23,12 @@ class HomeViewModel extends ChangeNotifier {
   List<Movie> _featured = [];
   List<GenreRow> _rows = [];
   bool _isLoading = false;
-  String? _error;
+  LoadError? _error;
 
   List<Movie> get featured => _featured;
   List<GenreRow> get rows => _rows;
   bool get isLoading => _isLoading;
-  String? get error => _error;
+  LoadError? get error => _error;
 
   Future<void> load() async {
     _isLoading = true;
@@ -49,7 +50,7 @@ class HomeViewModel extends ChangeNotifier {
             GenreRow(ApiConstants.homeGenres[i], results[i + 1]),
       ];
     } catch (_) {
-      _error = 'Could not load movies';
+      _error = LoadError.movies;
     } finally {
       _isLoading = false;
       notifyListeners();

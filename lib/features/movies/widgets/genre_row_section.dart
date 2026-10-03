@@ -4,6 +4,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../view_models/home_view_model.dart';
 import 'movie_poster_card.dart';
+import '../../../core/localization/genre_labels.dart';
+import '../../../core/localization/l10n.dart';
 
 /// A genre heading with its "See More" link and the horizontal poster strip
 /// underneath.
@@ -26,7 +28,7 @@ class GenreRowSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                row.genre,
+                genreLabel(context.l10n, row.genre),
                 style: TextStyle(
                   fontSize: context.sp(24),
                   fontWeight: FontWeight.w500,
@@ -38,7 +40,7 @@ class GenreRowSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'See More',
+                      context.l10n.seeMore,
                       style: TextStyle(
                         fontSize: context.sp(16),
                         color: AppColors.primary,

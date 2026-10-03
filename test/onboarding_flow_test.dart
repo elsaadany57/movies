@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies_app/app.dart';
+import 'package:movies_app/core/localization/locale_view_model.dart';
 import 'package:movies_app/data/repositories/movie_repository.dart';
 import 'package:movies_app/data/services/movie_service.dart';
 import 'package:movies_app/features/auth/view_models/auth_view_model.dart';
@@ -8,11 +9,15 @@ import 'package:movies_app/features/movies/view_models/home_view_model.dart';
 import 'package:movies_app/features/auth/views/login_screen.dart';
 import 'package:movies_app/features/onboarding/views/onboarding_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/fakes.dart';
 
 void main() {
   testWidgets('splash -> onboarding -> login', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final locale = LocaleViewModel(await SharedPreferences.getInstance());
+
     tester.view.physicalSize = const Size(430, 932);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -23,6 +28,7 @@ void main() {
       MultiProvider(
         providers: [
           Provider<MovieRepository>.value(value: repository),
+          ChangeNotifierProvider.value(value: locale),
           ChangeNotifierProvider(
             create: (_) => HomeViewModel(repository),
           ),

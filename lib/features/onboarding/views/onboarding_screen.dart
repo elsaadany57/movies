@@ -6,6 +6,7 @@ import '../../auth/views/login_screen.dart';
 import '../models/onboarding_item.dart';
 import '../widgets/onboarding_intro_page.dart';
 import '../widgets/onboarding_sheet_page.dart';
+import '../../../core/localization/l10n.dart';
 
 /// Swipeable onboarding flow: one intro page followed by [onboardingItems].
 class OnboardingScreen extends StatefulWidget {
@@ -18,7 +19,8 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   static const _pageDuration = Duration(milliseconds: 350);
   static const _pageCurve = Curves.easeInOut;
-  static final _pageCount = onboardingItems.length + 1;
+  /// The intro page plus one per poster.
+  static final _pageCount = onboardingImages.length + 1;
 
   final _controller = PageController();
 
@@ -28,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     // Decode every poster up front so swiping never shows an empty frame.
     for (final image in [
       AppAssets.onboarding1,
-      for (final item in onboardingItems) item.image,
+      ...onboardingImages,
     ]) {
       precacheImage(AssetImage(image), context);
     }
@@ -66,6 +68,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final items = onboardingItems(context.l10n);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
@@ -76,7 +80,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             if (index == 0) return OnboardingIntroPage(onExplore: _next);
 
             return OnboardingSheetPage(
-              item: onboardingItems[index - 1],
+              item: items[index - 1],
               isLast: index == _pageCount - 1,
               onNext: _next,
               onBack: _back,

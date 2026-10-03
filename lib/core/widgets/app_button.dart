@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
 import '../utils/responsive.dart';
 
 /// Full-width pill button from the design. [AppButton.filled] is the yellow
@@ -45,9 +44,12 @@ class AppButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(context.w(16)),
     );
     // A ButtonStyle textStyle replaces the theme's outright instead of merging
-    // with it, so the family has to be named here too.
+    // with it, so the theme's font (which changes with the language) has to
+    // be passed along by hand.
+    final font = Theme.of(context).textTheme.labelLarge;
     final textStyle = TextStyle(
-      fontFamily: AppTheme.fontFamily,
+      fontFamily: font?.fontFamily,
+      fontFamilyFallback: font?.fontFamilyFallback,
       fontSize: context.sp(20),
       fontWeight: FontWeight.w600,
     );

@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/network_poster.dart';
 import '../../../data/models/cast_member.dart';
+import '../../../core/localization/l10n.dart';
 
 /// One rounded row in the Cast list: portrait on the left, name and
 /// character on the right.
@@ -37,9 +38,9 @@ class CastTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name : ${member.name}', style: line),
+                Text(context.l10n.castName(member.name), style: line),
                 SizedBox(height: context.h(4)),
-                Text('Character : ${member.character}', style: line),
+                Text(context.l10n.castCharacter(member.character), style: line),
               ],
             ),
           ),

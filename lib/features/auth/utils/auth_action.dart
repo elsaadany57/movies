@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/utils/app_snackbar.dart';
 import '../view_models/auth_view_model.dart';
 
@@ -22,7 +23,11 @@ Future<void> submitAuthForm(
   if (!context.mounted) return;
 
   if (!succeeded) {
-    showAppMessage(context, viewModel.error ?? 'Something went wrong.');
+    final l10n = context.l10n;
+    showAppMessage(
+      context,
+      viewModel.failure?.message(l10n) ?? l10n.somethingWentWrong,
+    );
     return;
   }
 

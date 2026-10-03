@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../data/models/movie.dart';
 import '../../../data/repositories/movie_repository.dart';
+import '../../../core/errors/load_error.dart';
 
 /// Backs the search tab. Queries are debounced so typing does not fire a
 /// request per keystroke, which the API docs ask callers to avoid.
@@ -18,12 +19,12 @@ class SearchViewModel extends ChangeNotifier {
   String _term = '';
   List<Movie> _results = [];
   bool _isLoading = false;
-  String? _error;
+  LoadError? _error;
 
   String get term => _term;
   List<Movie> get results => _results;
   bool get isLoading => _isLoading;
-  String? get error => _error;
+  LoadError? get error => _error;
   bool get isEmptyTerm => _term.trim().isEmpty;
 
   void onTermChanged(String value) {
@@ -56,7 +57,7 @@ class SearchViewModel extends ChangeNotifier {
       _results = results;
     } catch (_) {
       if (term != _term) return;
-      _error = 'Could not search right now';
+      _error = LoadError.search;
     } finally {
       if (term == _term) {
         _isLoading = false;

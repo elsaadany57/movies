@@ -7,6 +7,7 @@ import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../onboarding/views/onboarding_screen.dart';
+import '../../../core/localization/l10n.dart';
 
 /// Shows the logo briefly, then moves on to onboarding.
 class SplashScreen extends StatefulWidget {
@@ -57,9 +58,10 @@ class _SplashScreenState extends State<SplashScreen> {
               Image.asset(AppAssets.routeLogo, width: context.w(180)),
               SizedBox(height: context.h(4)),
               Text(
-                'Supervised by Mohamed Nabil',
+                context.l10n.supervisedBy,
                 style: TextStyle(
                   fontFamily: 'Poppins',
+                  fontFamilyFallback: const ['Cairo'],
                   fontSize: context.sp(16),
                   color: AppColors.white,
                 ),

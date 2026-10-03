@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/localization/l10n.dart';
 
 /// Yellow rule either side of the word OR.
 class OrDivider extends StatelessWidget {
@@ -19,7 +20,7 @@ class OrDivider extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.w(12)),
           child: Text(
-            'OR',
+            context.l10n.or,
             style: TextStyle(fontSize: context.sp(16), color: AppColors.primary),
           ),
         ),

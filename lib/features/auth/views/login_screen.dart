@@ -17,6 +17,7 @@ import '../view_models/auth_view_model.dart';
 import '../../movies/views/main_screen.dart';
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
+import '../../../core/localization/l10n.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -60,6 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final validators = Validators(l10n);
+
     return AuthScaffold(
       child: Form(
         key: _formKey,
@@ -69,27 +73,27 @@ class _LoginScreenState extends State<LoginScreen> {
             Image.asset(AppAssets.appIcon, width: context.w(253)),
             AuthTextField(
               controller: _email,
-              hint: 'Email',
+              hint: l10n.email,
               icon: AppAssets.icEmail,
               keyboardType: TextInputType.emailAddress,
-              validator: Validators.email,
+              validator: validators.email,
             ),
             SizedBox(height: context.h(24)),
             AuthTextField(
               controller: _password,
-              hint: 'Password',
+              hint: l10n.password,
               icon: AppAssets.icPassword,
               obscure: true,
               textInputAction: TextInputAction.done,
-              validator: Validators.password,
+              validator: validators.password,
             ),
             SizedBox(height: context.h(8)),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: AlignmentDirectional.centerEnd,
               child: GestureDetector(
                 onTap: () => _open(const ForgetPasswordScreen()),
                 child: Text(
-                  'Forget Password ?',
+                  l10n.forgetPasswordLink,
                   style: TextStyle(
                     fontSize: context.sp(14),
                     fontWeight: FontWeight.w500,
@@ -100,21 +104,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: context.h(24)),
             AppButton.filled(
-              label: 'Login',
+              label: l10n.login,
               loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _login,
             ),
             SizedBox(height: context.h(24)),
             AuthPrompt(
-              question: "Don't Have Account ?",
-              action: 'Create One',
+              question: l10n.noAccount,
+              action: l10n.createOne,
               onTap: () => _open(const RegisterScreen()),
             ),
             SizedBox(height: context.h(24)),
             const OrDivider(),
             SizedBox(height: context.h(24)),
             AppButton.filled(
-              label: 'Login With Google',
+              label: l10n.loginWithGoogle,
               icon: const GoogleLogo(),
               onPressed: _loginWithGoogle,
             ),

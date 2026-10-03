@@ -10,6 +10,7 @@ import 'package:movies_app/features/profile/views/profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers/fakes.dart';
+import 'helpers/app_harness.dart';
 
 void _phoneScreen(WidgetTester tester) {
   tester.view.physicalSize = const Size(430, 932);
@@ -33,7 +34,7 @@ void main() {
             Provider<MovieRepository>.value(value: FakeMovieRepository()),
             ChangeNotifierProvider.value(value: library),
           ],
-          child: const MaterialApp(home: MovieDetailsScreen(movieId: 7)),
+          child: localizedApp(home: const MovieDetailsScreen(movieId: 7)),
         ),
       );
       await tester.pumpAndSettle();
@@ -117,7 +118,7 @@ void main() {
               create: (_) => ProfileViewModel(auth, library),
             ),
           ],
-          child: const MaterialApp(home: Scaffold(body: ProfileScreen())),
+          child: localizedApp(home: const Scaffold(body: ProfileScreen())),
         ),
       );
       await library.load();

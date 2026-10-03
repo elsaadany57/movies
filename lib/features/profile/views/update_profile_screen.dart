@@ -13,6 +13,7 @@ import '../../auth/widgets/auth_scaffold.dart';
 import '../../auth/widgets/auth_text_field.dart';
 import '../view_models/profile_view_model.dart';
 import '../widgets/avatar_grid_sheet.dart';
+import '../../../core/localization/l10n.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -53,7 +54,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     setState(() => _saving = false);
     showAppMessage(
       context,
-      ok ? 'Profile updated' : 'Could not update your profile',
+      ok ? context.l10n.profileUpdated : context.l10n.profileUpdateFailed,
       isError: !ok,
     );
     if (ok) Navigator.of(context).pop();
@@ -64,21 +65,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title: const Text('Delete account?'),
-        content: const Text(
-          'This removes your account and profile for good. It cannot be '
-          'undone.',
-        ),
+        title: Text(context.l10n.deleteAccountTitle),
+        content: Text(context.l10n.deleteAccountBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: AppColors.red),
+            child: Text(
+              context.l10n.delete,
+              style: const TextStyle(color: AppColors.red),
             ),
           ),
         ],
@@ -91,7 +89,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (!mounted) return;
 
     if (!ok) {
-      showAppMessage(context, 'Could not delete your account. Sign in again.');
+      showAppMessage(context, context.l10n.deleteAccountFailed);
       return;
     }
     Navigator.of(context).pushAndRemoveUntil(
@@ -102,8 +100,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final validators = Validators(context.l10n);
+
     return AuthScaffold(
-      title: 'Pick Avatar',
+      title: context.l10n.pickAvatar,
       child: Form(
         key: _formKey,
         child: Column(
@@ -119,17 +119,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             SizedBox(height: context.h(32)),
             AuthTextField(
               controller: _name,
-              hint: 'Name',
+              hint: context.l10n.name,
               icon: AppAssets.icName,
-              validator: (value) => Validators.required(value, 'name'),
+              validator: validators.name,
             ),
             SizedBox(height: context.h(16)),
             AuthTextField(
               controller: _phone,
-              hint: 'Phone Number',
+              hint: context.l10n.phoneNumber,
               icon: AppAssets.icPhone,
               keyboardType: TextInputType.phone,
-              validator: Validators.phone,
+              validator: validators.phone,
             ),
             SizedBox(height: context.h(16)),
             Align(
@@ -141,7 +141,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ),
                 child: Text(
-                  'Reset Password',
+                  context.l10n.resetPassword,
                   style: TextStyle(
                     fontSize: context.sp(20),
                     color: AppColors.white,
@@ -158,13 +158,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             ],
             SizedBox(height: context.h(32)),
             AppButton.filled(
-              label: 'Delete Account',
+              label: context.l10n.deleteAccount,
               color: AppColors.red,
               onPressed: _confirmDelete,
             ),
             SizedBox(height: context.h(16)),
             AppButton.filled(
-              label: 'Update Data',
+              label: context.l10n.updateData,
               loading: _saving,
               onPressed: _save,
             ),

@@ -7,7 +7,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/network_poster.dart';
 import '../../../data/models/movie.dart';
+import 'brush_heading.dart';
 import 'movie_poster_card.dart';
+import '../../../core/localization/l10n.dart';
 
 /// The top of the home screen: the selected movie's artwork blurred behind
 /// "Available Now", a swipeable poster carousel, and the "Watch Now" script.
@@ -100,7 +102,12 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
         Column(
           children: [
             SizedBox(height: MediaQuery.paddingOf(context).top + context.h(8)),
-            Image.asset(AppAssets.availableNow, width: context.w(265)),
+            BrushHeading(
+              image: AppAssets.availableNow,
+              text: context.l10n.availableNow,
+              imageWidth: 265,
+              arabicFontSize: 52,
+            ),
             SizedBox(height: context.h(16)),
             SizedBox(
               height: cardHeight,
@@ -121,7 +128,12 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
               ),
             ),
             SizedBox(height: context.h(24)),
-            Image.asset(AppAssets.watchNow, width: context.w(351)),
+            BrushHeading(
+              image: AppAssets.watchNow,
+              text: context.l10n.watchNow,
+              imageWidth: 351,
+              arabicFontSize: 76,
+            ),
             SizedBox(height: context.h(24)),
           ],
         ),

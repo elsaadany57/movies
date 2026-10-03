@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../core/errors/load_error.dart';
+import '../../../core/localization/l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_button.dart';
@@ -60,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         child: AppStateView(
           isLoading: vm.isLoading,
           error: vm.error,
-          emptyMessage: vm.isLoading ? null : 'You are not signed in',
+          emptyMessage: vm.isLoading ? null : context.l10n.notSignedIn,
           onRetry: context.read<ProfileViewModel>().load,
         ),
       );
@@ -96,13 +98,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Expanded(
                       child: _Count(
                         value: library.watchList.length,
-                        label: 'Wish List',
+                        label: context.l10n.wishList,
                       ),
                     ),
                     Expanded(
                       child: _Count(
                         value: library.history.length,
-                        label: 'History',
+                        label: context.l10n.history,
                       ),
                     ),
                   ],
@@ -113,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Expanded(
                       flex: 3,
                       child: AppButton.filled(
-                        label: 'Edit Profile',
+                        label: context.l10n.editProfile,
                         onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute<void>(
                             builder: (_) => const UpdateProfileScreen(),
@@ -125,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Expanded(
                       flex: 2,
                       child: AppButton.filled(
-                        label: 'Exit',
+                        label: context.l10n.exit,
                         color: AppColors.red,
                         icon: Icon(
                           Icons.logout,
@@ -148,8 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen>
             unselectedLabelColor: AppColors.white,
             labelStyle: TextStyle(fontSize: context.sp(16)),
             tabs: [
-              _tab(context, AppAssets.icWatchlist, 'Watch List'),
-              _tab(context, AppAssets.icHistory, 'History'),
+              _tab(context, AppAssets.icWatchlist, context.l10n.watchList),
+              _tab(context, AppAssets.icHistory, context.l10n.history),
             ],
           ),
           Expanded(
@@ -224,7 +226,7 @@ class _MovieList extends StatelessWidget {
     final library = context.watch<LibraryViewModel>();
     return AppStateView(
       isLoading: library.isLoading,
-      error: library.hasError ? 'Could not load your movies' : null,
+      error: library.hasError ? LoadError.library : null,
       onRetry: context.read<LibraryViewModel>().load,
     );
   }

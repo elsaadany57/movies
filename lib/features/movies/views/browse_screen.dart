@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/localization/genre_labels.dart';
+import '../../../core/localization/l10n.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_state_view.dart';
 import '../view_models/browse_view_model.dart';
@@ -42,7 +44,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 final genre = BrowseViewModel.genres[i];
                 return Center(
                   child: GenreChip(
-                    label: genre,
+                    label: genreLabel(context.l10n, genre),
                     selectable: true,
                     selected: genre == vm.genre,
                     onTap: () =>
@@ -61,7 +63,11 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   onRetry: context.read<BrowseViewModel>().load,
                 ),
               _ when vm.movies.isEmpty =>
-                AppStateView(emptyMessage: 'No ${vm.genre} movies found'),
+                AppStateView(
+                  emptyMessage: context.l10n.noGenreMovies(
+                    genreLabel(context.l10n, vm.genre),
+                  ),
+                ),
               _ => MovieGrid(movies: vm.movies),
             },
           ),

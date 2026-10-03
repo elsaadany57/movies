@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/localization/l10n.dart';
 
 /// Carousel of the selectable avatars: the chosen one sits centred and large,
 /// its neighbours peek in smaller on either side.
@@ -77,7 +78,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
         ),
         SizedBox(height: context.h(8)),
         Text(
-          'Avatar',
+          context.l10n.avatar,
           style: TextStyle(fontSize: context.sp(16), color: AppColors.white),
         ),
       ],

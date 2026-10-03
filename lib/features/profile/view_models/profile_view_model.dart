@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../data/models/app_user.dart';
 import '../../../data/repositories/auth_repository.dart';
 import 'library_view_model.dart';
+import '../../../core/errors/load_error.dart';
 
 /// Holds the signed-in user's profile. Their watch list and history live in
 /// [LibraryViewModel]; this only makes sure they are wiped when the account
@@ -15,11 +16,11 @@ class ProfileViewModel extends ChangeNotifier {
 
   AppUser? _user;
   bool _isLoading = false;
-  String? _error;
+  LoadError? _error;
 
   AppUser? get user => _user;
   bool get isLoading => _isLoading;
-  String? get error => _error;
+  LoadError? get error => _error;
 
   Future<void> load() async {
     _isLoading = true;
@@ -29,7 +30,7 @@ class ProfileViewModel extends ChangeNotifier {
     try {
       _user = await _repository.currentProfile();
     } catch (_) {
-      _error = 'Could not load your profile';
+      _error = LoadError.profile;
     } finally {
       _isLoading = false;
       notifyListeners();

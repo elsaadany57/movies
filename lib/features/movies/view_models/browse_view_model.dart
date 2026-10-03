@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../data/models/movie.dart';
 import '../../../data/repositories/movie_repository.dart';
+import '../../../core/errors/load_error.dart';
 
 /// Backs the browse tab: one genre selected at a time, its movies below.
 class BrowseViewModel extends ChangeNotifier {
@@ -15,12 +16,12 @@ class BrowseViewModel extends ChangeNotifier {
   String _genre = genres.first;
   List<Movie> _movies = [];
   bool _isLoading = false;
-  String? _error;
+  LoadError? _error;
 
   String get genre => _genre;
   List<Movie> get movies => _movies;
   bool get isLoading => _isLoading;
-  String? get error => _error;
+  LoadError? get error => _error;
 
   void selectGenre(String genre) {
     if (genre == _genre) return;
@@ -42,7 +43,7 @@ class BrowseViewModel extends ChangeNotifier {
       _movies = movies;
     } catch (_) {
       if (genre != _genre) return;
-      _error = 'Could not load $genre movies';
+      _error = LoadError.movies;
     } finally {
       if (genre == _genre) {
         _isLoading = false;

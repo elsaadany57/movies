@@ -9,6 +9,7 @@ import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_text_field.dart';
 import '../utils/auth_action.dart';
 import '../view_models/auth_view_model.dart';
+import '../../../core/localization/l10n.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -32,15 +33,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       context,
       formKey: _formKey,
       action: (vm) => vm.sendPasswordReset(_email.text.trim()),
-      successMessage: 'Reset link sent. Check your inbox.',
+      successMessage: context.l10n.resetLinkSent,
       onSuccess: () => Navigator.of(context).pop(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final validators = Validators(l10n);
+
     return AuthScaffold(
-      title: 'Forget Password',
+      title: l10n.forgetPasswordTitle,
       child: Form(
         key: _formKey,
         child: Column(
@@ -50,15 +54,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             SizedBox(height: context.h(48)),
             AuthTextField(
               controller: _email,
-              hint: 'Email',
+              hint: l10n.email,
               icon: AppAssets.icEmail,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.done,
-              validator: Validators.email,
+              validator: validators.email,
             ),
             SizedBox(height: context.h(24)),
             AppButton.filled(
-              label: 'Verify Email',
+              label: l10n.verifyEmail,
               loading: context.watch<AuthViewModel>().isLoading,
               onPressed: _verify,
             ),

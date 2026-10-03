@@ -1,31 +1,43 @@
-/// Form validators shared by the auth screens.
+import '../localization/l10n.dart';
+
+/// Form validators shared by the auth and profile screens. Built from the
+/// current translations, so each message follows the language the app is in:
+///
+/// ```dart
+/// final validators = Validators(context.l10n);
+/// AuthTextField(validator: validators.email);
+/// ```
 class Validators {
+  const Validators(this._l10n);
+
+  final AppLocalizations _l10n;
+
   static final _email = RegExp(r'^[\w.+-]+@[\w-]+\.[\w.-]+$');
 
-  static String? required(String? value, String field) =>
-      (value == null || value.trim().isEmpty) ? 'Enter your $field' : null;
+  static const _minPasswordLength = 6;
+  static const _minPhoneLength = 7;
 
-  static String? email(String? value) {
-    final empty = required(value, 'email');
-    if (empty != null) return empty;
-    return _email.hasMatch(value!.trim()) ? null : 'Enter a valid email';
+  static bool _blank(String? value) => value == null || value.trim().isEmpty;
+
+  String? name(String? value) => _blank(value) ? _l10n.enterName : null;
+
+  String? email(String? value) {
+    if (_blank(value)) return _l10n.enterEmail;
+    return _email.hasMatch(value!.trim()) ? null : _l10n.invalidEmail;
   }
 
-  static String? password(String? value) {
-    final empty = required(value, 'password');
-    if (empty != null) return empty;
-    return value!.length < 6 ? 'Password must be at least 6 characters' : null;
+  String? password(String? value) {
+    if (_blank(value)) return _l10n.enterPassword;
+    return value!.length < _minPasswordLength ? _l10n.passwordTooShort : null;
   }
 
-  static String? confirmPassword(String? value, String password) {
-    final empty = required(value, 'password confirmation');
-    if (empty != null) return empty;
-    return value == password ? null : 'Passwords do not match';
+  String? confirmPassword(String? value, String password) {
+    if (_blank(value)) return _l10n.enterConfirmPassword;
+    return value == password ? null : _l10n.passwordsMismatch;
   }
 
-  static String? phone(String? value) {
-    final empty = required(value, 'phone number');
-    if (empty != null) return empty;
-    return value!.trim().length < 7 ? 'Enter a valid phone number' : null;
+  String? phone(String? value) {
+    if (_blank(value)) return _l10n.enterPhone;
+    return value!.trim().length < _minPhoneLength ? _l10n.invalidPhone : null;
   }
 }

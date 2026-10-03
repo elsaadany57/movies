@@ -5,6 +5,7 @@ import '../../../core/widgets/app_button.dart';
 import '../models/onboarding_item.dart';
 import '../../../core/utils/responsive.dart';
 import 'poster_background.dart';
+import '../../../core/localization/l10n.dart';
 
 /// Onboarding page with a poster on top and a rounded bottom sheet holding
 /// the title, description and Next/Finish + Back buttons.
@@ -72,12 +73,12 @@ class OnboardingSheetPage extends StatelessWidget {
                 ],
                 SizedBox(height: context.h(24)),
                 AppButton.filled(
-                  label: isLast ? 'Finish' : 'Next',
+                  label: isLast ? context.l10n.finish : context.l10n.next,
                   onPressed: onNext,
                 ),
                 if (item.showBack) ...[
                   SizedBox(height: context.h(16)),
-                  AppButton.outlined(label: 'Back', onPressed: onBack),
+                  AppButton.outlined(label: context.l10n.back, onPressed: onBack),
                 ],
               ],
             ),

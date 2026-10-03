@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/localization/l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/app_state_view.dart';
@@ -25,7 +26,7 @@ class SearchScreen extends StatelessWidget {
               textInputAction: TextInputAction.search,
               style: TextStyle(fontSize: context.sp(16), color: AppColors.white),
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: context.l10n.search,
                 hintStyle: TextStyle(
                   fontSize: context.sp(16),
                   color: AppColors.textSecondary,
@@ -57,7 +58,7 @@ class _Results extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (vm.isEmptyTerm) {
-      return const AppStateView(emptyMessage: 'Search for a movie by name');
+      return AppStateView(emptyMessage: context.l10n.searchPrompt);
     }
     if (vm.isLoading || vm.error != null) {
       return AppStateView(
@@ -67,7 +68,7 @@ class _Results extends StatelessWidget {
       );
     }
     if (vm.results.isEmpty) {
-      return AppStateView(emptyMessage: 'No movies match "${vm.term}"');
+      return AppStateView(emptyMessage: context.l10n.noMoviesMatch(vm.term));
     }
     return MovieGrid(movies: vm.results);
   }

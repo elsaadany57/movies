@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/localization/genre_labels.dart';
+import '../../../core/localization/l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/app_snackbar.dart';
 import '../../../core/utils/responsive.dart';
@@ -15,6 +17,7 @@ import '../widgets/cast_tile.dart';
 import '../widgets/genre_chip.dart';
 import '../widgets/movie_grid.dart';
 import '../widgets/movie_stat_chip.dart';
+import '../../../core/utils/content_direction.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   const MovieDetailsScreen({super.key, required this.movieId});
@@ -73,6 +76,7 @@ class _Content extends StatelessWidget {
                 children: [
                   Text(
                     movie.title,
+                    textDirection: contentDirection(context, movie.title),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: context.sp(24),
@@ -90,7 +94,7 @@ class _Content extends StatelessWidget {
                   ),
                   SizedBox(height: context.h(16)),
                   AppButton.filled(
-                    label: 'Watch',
+                    label: context.l10n.watch,
                     color: AppColors.red,
                     onPressed: () => _watch(context, movie),
                   ),
@@ -100,7 +104,7 @@ class _Content extends StatelessWidget {
               ),
             ),
             if (movie.screenshots.isNotEmpty) ...[
-              _Heading('Screen Shots'),
+              _Heading(context.l10n.screenShots),
               for (final shot in movie.screenshots)
                 Padding(
                   padding: sidePadding.copyWith(bottom: context.h(12)),
@@ -111,7 +115,7 @@ class _Content extends StatelessWidget {
                 ),
             ],
             if (suggestions.isNotEmpty) ...[
-              _Heading('Similar'),
+              _Heading(context.l10n.similar),
               MovieGrid(
                 movies: suggestions,
                 shrinkWrap: true,
@@ -119,11 +123,12 @@ class _Content extends StatelessWidget {
               ),
             ],
             if (movie.summary.isNotEmpty) ...[
-              _Heading('Summary'),
+              _Heading(context.l10n.summary),
               Padding(
                 padding: sidePadding,
                 child: Text(
                   movie.summary,
+                  textDirection: contentDirection(context, movie.summary),
                   style: TextStyle(
                     fontSize: context.sp(16),
                     height: 1.5,
@@ -133,7 +138,7 @@ class _Content extends StatelessWidget {
               ),
             ],
             if (movie.cast.isNotEmpty) ...[
-              _Heading('Cast'),
+              _Heading(context.l10n.cast),
               for (final member in movie.cast)
                 Padding(
                   padding: sidePadding.copyWith(bottom: context.h(12)),
@@ -141,14 +146,15 @@ class _Content extends StatelessWidget {
                 ),
             ],
             if (movie.genres.isNotEmpty) ...[
-              _Heading('Genres'),
+              _Heading(context.l10n.genres),
               Padding(
                 padding: sidePadding,
                 child: Wrap(
                   spacing: context.w(12),
                   runSpacing: context.h(12),
                   children: [
-                    for (final genre in movie.genres) GenreChip(label: genre),
+                    for (final genre in movie.genres)
+                      GenreChip(label: genreLabel(context.l10n, genre)),
                   ],
                 ),
               ),
@@ -309,7 +315,7 @@ class _StatsRow extends StatelessWidget {
 /// movie to the user's history. There is no player yet, so this is all it does.
 void _watch(BuildContext context, Movie movie) {
   context.read<LibraryViewModel>().addToHistory(movie);
-  showAppMessage(context, 'Added to your History', isError: false);
+  showAppMessage(context, context.l10n.addedToHistory, isError: false);
 }
 
 Future<void> _toggleWatchList(BuildContext context, Movie movie) async {
@@ -319,9 +325,9 @@ Future<void> _toggleWatchList(BuildContext context, Movie movie) async {
   showAppMessage(
     context,
     switch (saved) {
-      null => 'Could not update your Watch List',
-      true => 'Added to your Watch List',
-      false => 'Removed from your Watch List',
+      null => context.l10n.watchListFailed,
+      true => context.l10n.addedToWatchList,
+      false => context.l10n.removedFromWatchList,
     },
     isError: saved == null,
   );

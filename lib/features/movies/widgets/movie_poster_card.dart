@@ -42,9 +42,9 @@ class MoviePosterCard extends StatelessWidget {
                 radius: radius ?? context.w(12),
               ),
             ),
-            Positioned(
+            PositionedDirectional(
               top: context.h(8),
-              left: context.w(8),
+              start: context.w(8),
               child: RatingBadge(rating: movie.rating),
             ),
           ],

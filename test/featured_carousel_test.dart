@@ -4,6 +4,7 @@ import 'package:movies_app/features/movies/widgets/featured_carousel.dart';
 import 'package:movies_app/features/movies/widgets/movie_poster_card.dart';
 
 import 'helpers/fakes.dart';
+import 'helpers/app_harness.dart';
 
 Future<void> _pump(WidgetTester tester, int count) async {
   tester.view.physicalSize = const Size(430, 932);
@@ -11,7 +12,7 @@ Future<void> _pump(WidgetTester tester, int count) async {
   addTearDown(tester.view.reset);
 
   await tester.pumpWidget(
-    MaterialApp(
+    localizedApp(
       home: Scaffold(
         body: ListView(
           children: [

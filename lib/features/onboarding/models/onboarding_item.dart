@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../core/localization/l10n.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Content + layout flags for one onboarding page.
@@ -28,39 +29,46 @@ class OnboardingItem {
   final bool showBack;
 }
 
-const onboardingItems = <OnboardingItem>[
-  OnboardingItem(
-    image: AppAssets.onboarding2,
-    title: 'Discover Movies',
-    description: 'Explore a vast collection of movies in all qualities and '
-        'genres. Find your next favorite film with ease.',
-    fade: AppColors.tealFade,
-    fadeHeightFactor: 1,
-    showBack: false,
-  ),
-  OnboardingItem(
-    image: AppAssets.onboarding3,
-    title: 'Explore All Genres',
-    description: 'Discover movies from every genre, in all available '
-        'qualities. Find something new and exciting to watch every day.',
-    fade: AppColors.redFade,
-    fadeHeightFactor: 1,
-  ),
-  OnboardingItem(
-    image: AppAssets.onboarding4,
-    title: 'Create Watchlists',
-    description: 'Save movies to your watchlist to keep track of what you '
-        'want to watch next. Enjoy films in various qualities and genres.',
-  ),
-  OnboardingItem(
-    image: AppAssets.onboarding5,
-    title: 'Rate, Review, and Learn',
-    description: "Share your thoughts on the movies you've watched. Dive deep "
-        'into film details and help others discover great movies with your '
-        'reviews.',
-  ),
-  OnboardingItem(
-    image: AppAssets.onboarding6,
-    title: 'Start Watching Now',
-  ),
+/// The poster behind each sheet page, in order. Kept apart from the words so
+/// they can be preloaded without a BuildContext, and so the page count does
+/// not depend on the language.
+const onboardingImages = [
+  AppAssets.onboarding2,
+  AppAssets.onboarding3,
+  AppAssets.onboarding4,
+  AppAssets.onboarding5,
+  AppAssets.onboarding6,
 ];
+
+/// The sheet pages after the intro, worded in the current language.
+List<OnboardingItem> onboardingItems(AppLocalizations l10n) => [
+      OnboardingItem(
+        image: onboardingImages[0],
+        title: l10n.onboardingDiscoverTitle,
+        description: l10n.onboardingDiscoverDescription,
+        fade: AppColors.tealFade,
+        fadeHeightFactor: 1,
+        showBack: false,
+      ),
+      OnboardingItem(
+        image: onboardingImages[1],
+        title: l10n.onboardingGenresTitle,
+        description: l10n.onboardingGenresDescription,
+        fade: AppColors.redFade,
+        fadeHeightFactor: 1,
+      ),
+      OnboardingItem(
+        image: onboardingImages[2],
+        title: l10n.onboardingWatchlistTitle,
+        description: l10n.onboardingWatchlistDescription,
+      ),
+      OnboardingItem(
+        image: onboardingImages[3],
+        title: l10n.onboardingReviewTitle,
+        description: l10n.onboardingReviewDescription,
+      ),
+      OnboardingItem(
+        image: onboardingImages[4],
+        title: l10n.onboardingStartTitle,
+      ),
+    ];

@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/utils/responsive.dart';
 import 'poster_background.dart';
+import '../../../core/localization/l10n.dart';
 
 /// First onboarding page: poster collage, headline and "Explore Now".
 class OnboardingIntroPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class OnboardingIntroPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Find Your Next\nFavorite Movie Here',
+                  context.l10n.introHeadline,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: context.sp(36),
@@ -45,8 +46,7 @@ class OnboardingIntroPage extends StatelessWidget {
                 ),
                 SizedBox(height: context.h(16)),
                 Text(
-                  'Get access to a huge library of movies\n'
-                  'to suit all tastes. You will surely like it.',
+                  context.l10n.introDescription,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: context.sp(20),
@@ -55,7 +55,10 @@ class OnboardingIntroPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: context.h(24)),
-                AppButton.filled(label: 'Explore Now', onPressed: onExplore),
+                AppButton.filled(
+                  label: context.l10n.exploreNow,
+                  onPressed: onExplore,
+                ),
               ],
             ),
           ),
