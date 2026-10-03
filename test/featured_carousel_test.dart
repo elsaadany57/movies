@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movies_app/data/models/movie.dart';
 import 'package:movies_app/features/movies/widgets/featured_carousel.dart';
 import 'package:movies_app/features/movies/widgets/movie_poster_card.dart';
 
-Movie _movie(int id) => Movie(
-      id: id,
-      title: 'Movie $id',
-      year: 2020,
-      rating: 7.7,
-      runtime: 100,
-      genres: const [],
-      summary: '',
-      coverUrl: '',
-      backgroundUrl: '',
-    );
+import 'helpers/fakes.dart';
 
 Future<void> _pump(WidgetTester tester, int count) async {
   tester.view.physicalSize = const Size(430, 932);
@@ -26,7 +15,7 @@ Future<void> _pump(WidgetTester tester, int count) async {
       home: Scaffold(
         body: ListView(
           children: [
-            FeaturedCarousel(movies: [for (var i = 1; i <= count; i++) _movie(i)]),
+            FeaturedCarousel(movies: [for (var i = 1; i <= count; i++) fakeMovie(i)]),
           ],
         ),
       ),

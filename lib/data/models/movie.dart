@@ -40,6 +40,20 @@ class Movie {
 
   bool get hasTrailer => (trailerCode ?? '').isNotEmpty;
 
+  /// The compact form kept in Firestore for the watch list and history: just
+  /// enough to draw a poster, using the API's own keys so [Movie.fromJson]
+  /// reads it back unchanged and those grids need no extra API calls.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'year': year,
+        'rating': rating,
+        'runtime': runtime,
+        'genres': genres,
+        'medium_cover_image': coverUrl,
+        'background_image_original': backgroundUrl,
+      };
+
   factory Movie.fromJson(Map<String, dynamic> json) {
     // The list endpoint calls it `summary`, the details endpoint
     // `description_full` / `description_intro`.
