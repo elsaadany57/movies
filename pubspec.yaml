@@ -39,6 +39,10 @@ dependencies:
   firebase_core: ^4.15.0
   firebase_auth: ^6.7.0
   cloud_firestore: ^6.10.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +60,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  # Generates AppLocalizations from lib/l10n/*.arb (see l10n.yaml).
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -86,6 +92,22 @@ flutter:
         - asset: assets/fonts/Poppins-400.ttf
         - asset: assets/fonts/Poppins-500.ttf
           weight: 500
+    # Inter has no Arabic glyphs, so Arabic text is set in Cairo instead.
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-400.ttf
+        - asset: assets/fonts/Cairo-500.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo-600.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo-700.ttf
+          weight: 700
+    # Calligraphic, for the Arabic stand-ins of the two brush-script headings.
+    - family: ArefRuqaa
+      fonts:
+        - asset: assets/fonts/ArefRuqaa-400.ttf
+        - asset: assets/fonts/ArefRuqaa-700.ttf
+          weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
